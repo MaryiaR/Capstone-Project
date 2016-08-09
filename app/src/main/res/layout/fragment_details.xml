@@ -1,0 +1,144 @@
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:elevation="@dimen/appbar_elevation">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/toolbar_height"
+            android:elevation="0dp"
+            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:contentDescription="@string/app_name">
+
+                <TextView
+                    android:id="@+id/tv_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:text="Today" />
+
+                <com.github.lzyzsd.circleprogress.ArcProgress
+                    android:id="@+id/arc_progress"
+                    android:layout_width="@dimen/progress_bar_size"
+                    android:layout_height="@dimen/progress_bar_size"
+                    android:layout_below="@id/tv_date"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    app:arc_progress="55"
+                    app:arc_suffix_text="kcal"
+                    app:arc_text_size="@dimen/progress_text_size" />
+
+                <TextView
+                    android:id="@+id/tv_fpc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/arc_progress"
+                    android:layout_centerHorizontal="true"
+                    android:text="Fat: 100g, Carbs: 100g, Protein: 100g" />
+
+            </RelativeLayout>
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <TableLayout
+            android:id="@+id/tl_food"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@color/colorPrimaryDark"
+            android:paddingBottom="@dimen/table_bottom_padding"
+            android:shrinkColumns="1"
+            android:stretchColumns="1">
+
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="?android:attr/listPreferredItemHeight"
+                android:background="@android:color/transparent"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_marginBottom="1dp"
+                android:focusableInTouchMode="false">
+
+                <TextView
+                    android:id="@+id/tv_food_name"
+                    style="@style/TableCellHeaderTheme"
+                    android:layout_width="0dp"
+                    android:layout_weight="3"
+                    android:text="@string/food" />
+
+                <TextView
+                    android:id="@+id/tv_weight"
+                    style="@style/TableCellHeaderTheme"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:text="@string/weight" />
+
+                <TextView
+                    android:id="@+id/tv_fat"
+                    style="@style/TableCellHeaderTheme"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:text="@string/fat" />
+
+                <TextView
+                    android:id="@+id/tv_carbs"
+                    style="@style/TableCellHeaderTheme"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:text="@string/carbs" />
+
+                <TextView
+                    android:id="@+id/tv_prot"
+                    style="@style/TableCellHeaderTheme"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:text="@string/protein" />
+
+                <TextView
+                    android:id="@+id/tv_kcal"
+                    style="@style/TableCellHeaderTheme"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:text="@string/kcal" />
+            </TableRow>
+        </TableLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/add_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:contentDescription="@string/add"
+        android:src="@drawable/ic_add_white"
+        app:borderWidth="0dp"
+        app:elevation="@dimen/fab_elevation"
+        app:fabSize="normal"
+        app:pressedTranslationZ="@dimen/fab_press_translation_z" />
+</android.support.design.widget.CoordinatorLayout>
+
+
