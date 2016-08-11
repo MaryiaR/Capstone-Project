@@ -74,10 +74,29 @@
         android:gravity="center"
         android:inputType="numberDecimal" />
 
+    <TextView
+        android:id="@+id/tv_kcal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_prot"
+        android:layout_marginTop="@dimen/dialog_vertical_margin"
+        android:padding="@dimen/dialog_text_padding"
+        android:text="@string/kcal_lbl" />
+
+    <EditText
+        android:id="@+id/et_kcal"
+        android:layout_width="@dimen/et_fcp_width"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@id/tv_kcal"
+        android:gravity="center"
+        android:maxLength="5"
+        android:inputType="numberDecimal" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tv_prot"
+        android:layout_below="@id/tv_kcal"
         android:layout_marginTop="@dimen/dialog_vertical_margin"
         android:gravity="right">
 

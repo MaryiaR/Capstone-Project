@@ -22,4 +22,5 @@
     <string name="cancel">Cancel</string>
     <string name="error_empty_name">Name must not be empty</string>
     <string name="error_empty_value">Value must not be empty</string>
+    <string name="weight_dialog_title">Enter weight of %s in grams</string>
 </resources>
