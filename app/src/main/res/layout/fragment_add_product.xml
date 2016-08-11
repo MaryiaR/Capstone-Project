@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="@dimen/dialog_padding">
+
+    <EditText
+        android:id="@+id/et_product_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:hint="@string/product_name_hint" />
+
+    <TextView
+        android:id="@+id/text1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/et_product_name"
+        android:layout_marginTop="@dimen/dialog_vertical_margin"
+        android:text="@string/in_100_gr" />
+
+    <TextView
+        android:id="@+id/tv_fat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/text1"
+        android:layout_marginTop="@dimen/dialog_vertical_margin"
+        android:padding="@dimen/dialog_text_padding"
+        android:text="@string/fat_lbl" />
+
+    <EditText
+        android:id="@+id/et_fat"
+        android:layout_width="@dimen/et_fcp_width"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@id/tv_fat"
+        android:gravity="center"
+        android:inputType="numberDecimal" />
+
+    <TextView
+        android:id="@+id/tv_carbs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_fat"
+        android:layout_marginTop="@dimen/dialog_vertical_margin"
+        android:padding="@dimen/dialog_text_padding"
+        android:text="@string/carbs_lbl" />
+
+    <EditText
+        android:id="@+id/et_carbs"
+        android:layout_width="@dimen/et_fcp_width"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@id/tv_carbs"
+        android:gravity="center"
+        android:inputType="numberDecimal" />
+
+    <TextView
+        android:id="@+id/tv_prot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_carbs"
+        android:layout_marginTop="@dimen/dialog_vertical_margin"
+        android:padding="@dimen/dialog_text_padding"
+        android:text="@string/protein_lbl" />
+
+    <EditText
+        android:id="@+id/et_prot"
+        android:layout_width="@dimen/et_fcp_width"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@id/tv_prot"
+        android:gravity="center"
+        android:inputType="numberDecimal" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_prot"
+        android:layout_marginTop="@dimen/dialog_vertical_margin"
+        android:gravity="right">
+
+        <Button
+            android:id="@+id/btn_save"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:padding="@dimen/dialog_padding"
+            android:text="@string/save"
+            android:textColor="@color/colorPrimary" />
+
+        <Button
+            android:id="@+id/btn_cancel"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:padding="@dimen/dialog_padding"
+            android:text="@string/cancel"
+            android:textColor="@color/colorAccent" />
+    </LinearLayout>
+</RelativeLayout>

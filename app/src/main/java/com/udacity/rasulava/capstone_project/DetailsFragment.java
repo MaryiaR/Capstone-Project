@@ -92,7 +92,7 @@ public class DetailsFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_SEARCH) {
+        if (requestCode == REQUEST_CODE_SEARCH && data != null) {
             String id = data.getStringExtra(EXTRA_FOOD_ID_SELECTED);
             if (id != null) {
                 new RequestHelper().getFoodById(getActivity(), id, new RequestHelper.ResultListener<FoodDetails>() {

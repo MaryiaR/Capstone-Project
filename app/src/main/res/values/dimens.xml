@@ -13,4 +13,8 @@
     <dimen name="fab_press_translation_z">12dp</dimen>
     <dimen name="fab_margin">24dp</dimen>
     <dimen name="table_bottom_padding">50dp</dimen>
+    <dimen name="et_fcp_width">100dp</dimen>
+    <dimen name="dialog_padding">20dp</dimen>
+    <dimen name="dialog_vertical_margin">20dp</dimen>
+    <dimen name="dialog_text_padding">10dp</dimen>
 </resources>

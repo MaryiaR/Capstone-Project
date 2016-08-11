@@ -22,6 +22,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by mrasulava on 8/10/2016.
@@ -116,7 +117,13 @@ public class SearchProductFragment extends Fragment implements OnProductsSearchL
     public void onProductSelected(String foodId) {
         Intent intent = new Intent();
         intent.putExtra(DetailsFragment.EXTRA_FOOD_ID_SELECTED, foodId);
-        getActivity().setResult(Activity.RESULT_OK , intent);
+        getActivity().setResult(Activity.RESULT_OK, intent);
         getActivity().finish();
+    }
+
+    @OnClick(R.id.add_fab)
+    public void addProduct(View view) {
+        AddProductFragment dialog = new AddProductFragment();
+        dialog.show(getFragmentManager(), "tag");
     }
 }
