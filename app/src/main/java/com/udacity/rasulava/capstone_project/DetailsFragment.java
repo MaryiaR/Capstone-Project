@@ -1,5 +1,6 @@
 package com.udacity.rasulava.capstone_project;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,6 +10,13 @@ import android.view.ViewGroup;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.udacity.rasulava.capstone_project.model.FoodDetails;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by Maryia on 09.07.2016.
@@ -16,7 +24,11 @@ import android.widget.TextView;
 public class DetailsFragment extends Fragment {
 
     public static final String POS = "pos";
-    private TableLayout mTableLayout;
+    public static final int REQUEST_CODE_SEARCH = 100;
+    public static final String EXTRA_FOOD_ID_SELECTED = "food_id_selected";
+
+    @BindView(R.id.tl_food)
+    TableLayout mTableLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -28,8 +40,8 @@ public class DetailsFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_details, container, false);
+        ButterKnife.bind(this, rootView);
 
-        mTableLayout = (TableLayout) rootView.findViewById(R.id.tl_food);
         for (int i = 0; i < 6; i++) {
             addTableRow();
         }
@@ -40,22 +52,23 @@ public class DetailsFragment extends Fragment {
         final TableRow tr = (TableRow) getActivity().getLayoutInflater().inflate(R.layout.table_row_item, null);
 
         TextView tv;
-        tv = (TextView) tr.findViewById(R.id.tv_food_name);
+
+        tv = ButterKnife.findById(tr, R.id.tv_food_name);
         tv.setText("food");
 
-        tv = (TextView) tr.findViewById(R.id.tv_weight);
+        tv = ButterKnife.findById(tr, R.id.tv_weight);
         tv.setText("100");
 
-        tv = (TextView) tr.findViewById(R.id.tv_fat);
+        tv = ButterKnife.findById(tr, R.id.tv_fat);
         tv.setText("food");
 
-        tv = (TextView) tr.findViewById(R.id.tv_carbs);
+        tv = ButterKnife.findById(tr, R.id.tv_carbs);
         tv.setText("100");
 
-        tv = (TextView) tr.findViewById(R.id.tv_prot);
+        tv = ButterKnife.findById(tr, R.id.tv_prot);
         tv.setText("food");
 
-        tv = (TextView) tr.findViewById(R.id.tv_kcal);
+        tv = ButterKnife.findById(tr, R.id.tv_kcal);
         tv.setText("100");
 
         mTableLayout.addView(tr);
@@ -68,5 +81,33 @@ public class DetailsFragment extends Fragment {
 
         // If you use context menu it should be registered for each table row
         registerForContextMenu(tr);
+    }
+
+    @OnClick(R.id.add_fab)
+    public void addProduct(View view) {
+        Intent intent = new Intent(getActivity(), SearchProductActivity.class);
+        startActivityForResult(intent, REQUEST_CODE_SEARCH);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_SEARCH) {
+            String id = data.getStringExtra(EXTRA_FOOD_ID_SELECTED);
+            if (id != null) {
+                new RequestHelper().getFoodById(getActivity(), id, new RequestHelper.ResultListener<FoodDetails>() {
+                    @Override
+                    public void onSuccess(FoodDetails result) {
+                        Toast.makeText(getActivity(), result.getName(), Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onFailure() {
+                        Toast.makeText(getActivity(), "waisted!", Toast.LENGTH_LONG).show();
+                    }
+                });
+
+            }
+        }
     }
 }

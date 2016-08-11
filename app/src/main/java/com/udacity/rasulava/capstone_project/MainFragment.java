@@ -10,13 +10,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 /**
  * Created by Maryia on 09.07.2016.
  */
 public class MainFragment extends Fragment {
 
-    private RecyclerView mRecyclerView;
     private OnDayClickListener listener;
+
+    @BindView(R.id.rv_history)
+    RecyclerView mRecyclerView;
 
     @Override
     public void onAttach(Activity activity) {
@@ -39,25 +45,25 @@ public class MainFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        ButterKnife.bind(this, rootView);
 
-        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.rv_history);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mRecyclerView.setAdapter(new RecyclerView.Adapter<PlanetViewHolder>() {
+        mRecyclerView.setAdapter(new RecyclerView.Adapter<DateViewHolder>() {
 
             @Override
-            public PlanetViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            public DateViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
                 View v = LayoutInflater.from(parent.getContext()).inflate(
                         android.R.layout.simple_list_item_1,
                         parent,
                         false);
-                PlanetViewHolder vh = new PlanetViewHolder(v, listener);
+                DateViewHolder vh = new DateViewHolder(v, listener);
                 return vh;
             }
 
             @Override
-            public void onBindViewHolder(PlanetViewHolder vh, int position) {
+            public void onBindViewHolder(DateViewHolder vh, int position) {
                 TextView tv = (TextView) vh.itemView;
-                tv.setText("day "+ position);
+                tv.setText("day " + position);
             }
 
             @Override
@@ -69,19 +75,19 @@ public class MainFragment extends Fragment {
         return rootView;
     }
 
-    public class PlanetViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class DateViewHolder extends RecyclerView.ViewHolder{
 
-        protected TextView text;
+        @BindView(android.R.id.text1)
+        TextView text;
         private OnDayClickListener listener;
 
-        public PlanetViewHolder(View itemView, OnDayClickListener listener) {
+        public DateViewHolder(View itemView, OnDayClickListener listener) {
             super(itemView);
+            ButterKnife.bind(this, itemView);
             this.listener = listener;
-            text = (TextView) itemView.findViewById(R.id.text_id);
-            itemView.setOnClickListener(this);
         }
 
-        @Override
+        @OnClick(android.R.id.text1)
         public void onClick(View view) {
             int adapterPosition = getAdapterPosition();
             listener.onDayClick(adapterPosition);

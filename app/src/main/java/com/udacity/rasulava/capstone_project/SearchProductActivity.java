@@ -8,21 +8,18 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by Maryia on 09.07.2016.
+ * Created by mrasulava on 8/10/2016.
  */
-public class DetailActivity extends AppCompatActivity {
-
+public class SearchProductActivity extends AppCompatActivity {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_details);
+        setContentView(R.layout.activity_search_product);
         ButterKnife.bind(this);
-
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
-
 }

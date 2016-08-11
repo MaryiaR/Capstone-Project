@@ -2,25 +2,39 @@ package com.udacity.rasulava.capstone_project;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.FrameLayout;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity implements MainFragment.OnDayClickListener {
 
     private static final String DETAILS_FRAGMENT_TAG = "DETAILS_TAG";
+
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+
+    @Nullable
+    @BindView(R.id.container_details)
+    FrameLayout containerDetails;
+
     private boolean mTwoPane;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        ButterKnife.bind(this);
+
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        if (findViewById(R.id.container_details) != null) {
+        if (containerDetails != null) {
             mTwoPane = true;
             if (savedInstanceState == null) {
                 DetailsFragment fragment = new DetailsFragment();
