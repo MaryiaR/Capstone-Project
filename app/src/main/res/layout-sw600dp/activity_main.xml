@@ -5,7 +5,7 @@
 
     <fragment
         android:id="@+id/fragment_main"
-        android:name="com.udacity.rasulava.capstone_project.MainFragment"
+        android:name="com.udacity.rasulava.capstone_project.ui.MainFragment"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1" />

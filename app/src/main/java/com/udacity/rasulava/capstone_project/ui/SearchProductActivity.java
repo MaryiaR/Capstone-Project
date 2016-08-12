@@ -1,8 +1,10 @@
-package com.udacity.rasulava.capstone_project;
+package com.udacity.rasulava.capstone_project.ui;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+
+import com.udacity.rasulava.capstone_project.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

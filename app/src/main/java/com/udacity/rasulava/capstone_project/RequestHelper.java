@@ -214,9 +214,4 @@ public class RequestHelper {
         return n.toString();
     }
 
-    interface ResultListener<T> {
-        void onSuccess(T result);
-
-        void onFailure();
-    }
 }

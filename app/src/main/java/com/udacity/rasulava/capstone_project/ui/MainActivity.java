@@ -1,4 +1,4 @@
-package com.udacity.rasulava.capstone_project;
+package com.udacity.rasulava.capstone_project.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +8,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
+
+import com.udacity.rasulava.capstone_project.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -58,6 +60,8 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnDa
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
+            Intent intent = new Intent(this, ProfileActivity.class);
+            startActivity(intent);
             return true;
         }
         return super.onOptionsItemSelected(item);

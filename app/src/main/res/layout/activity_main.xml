@@ -1,5 +1,5 @@
 <fragment xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/fragment_main"
-    android:name="com.udacity.rasulava.capstone_project.MainFragment"
+    android:name="com.udacity.rasulava.capstone_project.ui.MainFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent" />

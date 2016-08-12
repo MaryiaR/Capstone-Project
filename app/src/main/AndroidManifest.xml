@@ -9,7 +9,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -17,8 +17,21 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".DetailActivity"/>
-        <activity android:name=".SearchProductActivity"/>
+        <activity android:name=".ui.DetailActivity" />
+        <activity
+            android:name=".ui.SearchProductActivity"
+            android:parentActivityName=".ui.DetailActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.DetailActivity" />
+        </activity>
+        <activity
+            android:name=".ui.ProfileActivity"
+            android:parentActivityName=".ui.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

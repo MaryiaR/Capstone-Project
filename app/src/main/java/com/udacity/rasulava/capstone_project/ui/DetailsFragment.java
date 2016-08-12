@@ -1,4 +1,4 @@
-package com.udacity.rasulava.capstone_project;
+package com.udacity.rasulava.capstone_project.ui;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -12,6 +12,9 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.udacity.rasulava.capstone_project.R;
+import com.udacity.rasulava.capstone_project.RequestHelper;
+import com.udacity.rasulava.capstone_project.ResultListener;
 import com.udacity.rasulava.capstone_project.model.FoodDetails;
 
 import butterknife.BindView;
@@ -95,7 +98,7 @@ public class DetailsFragment extends Fragment {
         if (requestCode == REQUEST_CODE_SEARCH && data != null) {
             String id = data.getStringExtra(EXTRA_FOOD_ID_SELECTED);
             if (id != null) {
-                new RequestHelper().getFoodById(getActivity(), id, new RequestHelper.ResultListener<FoodDetails>() {
+                new RequestHelper().getFoodById(getActivity(), id, new ResultListener<FoodDetails>() {
                     @Override
                     public void onSuccess(FoodDetails result) {
                         Toast.makeText(getActivity(), result.getName(), Toast.LENGTH_LONG).show();

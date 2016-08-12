@@ -1,4 +1,4 @@
-package com.udacity.rasulava.capstone_project;
+package com.udacity.rasulava.capstone_project.ui;
 
 import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.TextView;
 
+import com.udacity.rasulava.capstone_project.RequestHelper;
 import com.udacity.rasulava.capstone_project.model.Food;
 
 import java.util.ArrayList;

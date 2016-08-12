@@ -1,4 +1,4 @@
-package com.udacity.rasulava.capstone_project;
+package com.udacity.rasulava.capstone_project.ui;
 
 /**
  * Created by mrasulava on 8/11/2016.

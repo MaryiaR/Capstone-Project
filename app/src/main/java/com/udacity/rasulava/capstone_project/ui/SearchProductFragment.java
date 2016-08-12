@@ -1,4 +1,4 @@
-package com.udacity.rasulava.capstone_project;
+package com.udacity.rasulava.capstone_project.ui;
 
 
 import android.app.Activity;
@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.udacity.rasulava.capstone_project.R;
 import com.udacity.rasulava.capstone_project.model.Food;
 
 import java.util.ArrayList;
