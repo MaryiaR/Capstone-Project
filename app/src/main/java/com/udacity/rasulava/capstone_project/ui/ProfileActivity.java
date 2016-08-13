@@ -13,6 +13,9 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.udacity.rasulava.capstone_project.R;
 import com.udacity.rasulava.capstone_project.Utils;
 import com.udacity.rasulava.capstone_project.model.UserData;
@@ -59,6 +62,11 @@ public class ProfileActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        MobileAds.initialize(getApplicationContext(), getString(R.string.banner_ad_app_id));
+        AdView mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest.Builder builder = new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR);
+        AdRequest adRequest = builder.build();
+        mAdView.loadAd(adRequest);
 
         ArrayAdapter<String> adapterExercise = createSpinnerAdapter(R.array.exercise_array);
         spinnerExercise.setAdapter(adapterExercise);
