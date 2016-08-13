@@ -1,9 +1,13 @@
 package com.udacity.rasulava.capstone_project;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.provider.Settings;
 
 import com.udacity.rasulava.capstone_project.db.DBHelper;
 import com.udacity.rasulava.capstone_project.model.HistoryItem;
@@ -59,6 +63,42 @@ public class Utils {
         ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = manager.getActiveNetworkInfo();
         return (networkInfo != null && networkInfo.isConnected());
+    }
+
+    public static void showWarningIfNoConnection(final Context context) {
+        if (!haveInternetConnection(context)) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setMessage(context.getString(R.string.no_connection_warning))
+                    .setCancelable(false)
+                    .setPositiveButton(context.getString(R.string.ok), null)
+                    .setNegativeButton(context.getString(R.string.settings), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
+                            context.startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+                            dialog.cancel();
+                        }
+                    });
+            AlertDialog alert = builder.create();
+            alert.show();
+        }
+    }
+
+    public static void showErrorIfNoConnection(final Context context) {
+        if (!haveInternetConnection(context)) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setMessage(context.getString(R.string.no_connection_error))
+                    .setCancelable(false)
+                    .setPositiveButton(context.getString(R.string.cancel), null)
+                    .setNegativeButton(context.getString(R.string.settings), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
+                            context.startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+                            dialog.cancel();
+                        }
+                    });
+            AlertDialog alert = builder.create();
+            alert.show();
+        }
     }
 
     public static String dateToString(Date date) {
@@ -153,5 +193,6 @@ public class Utils {
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         return sharedPreferences.getInt(PREFS_KCAL_KEY, 0);
     }
+
 
 }

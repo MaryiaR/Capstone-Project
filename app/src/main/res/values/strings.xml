@@ -43,6 +43,9 @@
     <string name="fcp">Fat/Carbs/Protein</string>
     <string name="delete_item">Delete %s?</string>
     <string name="ok">Ok</string>
+    <string name="no_connection_warning">No internet access. Only offline search is available.</string>
+    <string name="no_connection_error">Something went wrong. Check your internet connection and try again.</string>
+    <string name="settings">Settings</string>
 
     <string-array name="exercise_array">
         <item>Little/no exercise</item>

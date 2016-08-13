@@ -15,7 +15,6 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.udacity.rasulava.capstone_project.R;
 import com.udacity.rasulava.capstone_project.RequestHelper;
@@ -167,8 +166,7 @@ public class SearchProductFragment extends Fragment implements OnProductsSearchL
 
                         @Override
                         public void onFailure() {
-                            Toast.makeText(getActivity(), "failed!", Toast.LENGTH_LONG).show();
-
+                            Utils.showErrorIfNoConnection(getActivity());
                         }
                     });
                 }

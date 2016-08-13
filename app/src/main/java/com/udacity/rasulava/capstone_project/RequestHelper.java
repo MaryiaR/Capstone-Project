@@ -143,6 +143,13 @@ public class RequestHelper {
                             listener.onSuccess(new Gson().fromJson(res, FoodDetailsResponse.class).getFoods());
                         }
                     });
+                } else {
+                    mainHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            listener.onFailure();
+                        }
+                    });
                 }
             }
         });
@@ -156,11 +163,10 @@ public class RequestHelper {
      * @return
      */
     public List<ResponseFood> getFood(Context context, String name) {
-//        if (!Utils.haveInternetConnection(context)) {
-//            listener.onFailure();
-//            return;
-//        }
         List<ResponseFood> resultList = new ArrayList<>();
+        if (!Utils.haveInternetConnection(context)) {
+            return resultList;
+        }
 
         HashMap<String, String> map = new HashMap<>();
         map.put("search_expression", name);
