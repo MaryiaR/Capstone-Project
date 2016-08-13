@@ -1,11 +1,13 @@
 package com.udacity.rasulava.capstone_project.model;
 
+import java.util.Date;
+
 /**
  * Created by Maryia on 12.08.2016.
  */
 public class HistoryItem {
 
-    private String date;
+    private Date date;
 
     private int kcal;
 
@@ -15,11 +17,11 @@ public class HistoryItem {
 
     private int protein;
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 

@@ -54,9 +54,10 @@ public class DetailsFragment extends Fragment {
     @BindView(R.id.rv_food)
     RecyclerView mRecyclerView;
 
-    private String date;
+    private Date date;
 
     private IntakeAdapter adapter;
+    private DBHelper dbHelper;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -69,6 +70,7 @@ public class DetailsFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_details, container, false);
         ButterKnife.bind(this, rootView);
 
+        dbHelper = new DBHelper(getActivity());
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new IntakeAdapter();
         mRecyclerView.setAdapter(adapter);
@@ -96,21 +98,21 @@ public class DetailsFragment extends Fragment {
         }
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
-        if (!Utils.dateToString(new Date()).equalsIgnoreCase(date)) {
+        if (!Utils.dateToString(new Date()).equalsIgnoreCase(Utils.dateToString(date))) {
             addFab.setVisibility(View.GONE);
         }
         updateData();
     }
 
     private void updateData() {
-        List<IntakeItem> list = DBHelper.getInstance(getActivity()).getHistoryForDate(date);
+        List<IntakeItem> list = dbHelper.getHistoryForDate(date);
         HistoryItem item = Utils.intakesToHistoryItem(list);
         adapter.setList(list);
 
         int kcalDaily = Utils.getDailyKcal(getActivity());
-        tvDate.setText(getString(R.string.date_today, date));
+        tvDate.setText(getString(R.string.date_today, Utils.dateToString(date)));
         tvFpc.setText(getString(R.string.today_fcp, item.getFat(), item.getCarbs(), item.getProtein()));
         if (item.getKcal() > kcalDaily) {
             arcProgress.setMax(item.getKcal());
@@ -234,7 +236,7 @@ public class DetailsFragment extends Fragment {
                     .setPositiveButton(getString(R.string.ok),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
-                                    DBHelper.getInstance(getActivity()).delete(intakeItem.getId());
+                                    dbHelper.delete(intakeItem.getId());
                                     updateData();
                                     dialog.cancel();
                                 }

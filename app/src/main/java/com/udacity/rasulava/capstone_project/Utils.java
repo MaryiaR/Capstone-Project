@@ -114,8 +114,23 @@ public class Utils {
         }
     }
 
-    private static HistoryItem createHistoryItem(Context context, String date) {
-        List<IntakeItem> dbIntakeList = DBHelper.getInstance(context).getHistoryForDate(date);
+    public static Date getDateWeekAgo() {
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.add(Calendar.DAY_OF_MONTH, -7);
+        return roundDateToDay(calendar.getTime());
+    }
+
+    public static Date roundDateToDay(Date date) {
+        calendar.setTime(date);
+        calendar.set(Calendar.MILLISECOND, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.HOUR, 0);
+        return calendar.getTime();
+    }
+
+    private static HistoryItem createHistoryItem(Context context, Date date) {
+        List<IntakeItem> dbIntakeList = new DBHelper(context).getHistoryForDate(date);
         HistoryItem item = intakesToHistoryItem(dbIntakeList);
         item.setDate(date);
         return item;
@@ -126,8 +141,7 @@ public class Utils {
         calendar.setTime(new Date());
         for (int i = 0; i < 6; i++) {
             calendar.add(Calendar.DAY_OF_MONTH, -1);
-            String date = Utils.dateToString(calendar.getTime());
-            HistoryItem item = createHistoryItem(context, date);
+            HistoryItem item = createHistoryItem(context, calendar.getTime());
             list.add(item);
         }
 
@@ -135,7 +149,7 @@ public class Utils {
     }
 
     public static HistoryItem getTodayData(Context context) {
-        return createHistoryItem(context, Utils.dateToString(new Date()));
+        return createHistoryItem(context, new Date());
     }
 
     public static HistoryItem intakesToHistoryItem(List<IntakeItem> intakeList) {

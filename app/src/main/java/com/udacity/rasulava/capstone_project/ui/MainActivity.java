@@ -9,6 +9,9 @@ import android.view.MenuItem;
 import android.widget.FrameLayout;
 
 import com.udacity.rasulava.capstone_project.R;
+import com.udacity.rasulava.capstone_project.db.DBHelper;
+
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnDa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        new DBHelper(this).deleteOldData();
         if (containerDetails != null) {
             mTwoPane = true;
             if (savedInstanceState == null) {
@@ -61,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnDa
 
 
     @Override
-    public void onDayClick(int pos, String date) {
+    public void onDayClick(int pos, Date date) {
         if (mTwoPane) {
             Bundle args = new Bundle();
             args.putInt(DetailsFragment.POS, pos);

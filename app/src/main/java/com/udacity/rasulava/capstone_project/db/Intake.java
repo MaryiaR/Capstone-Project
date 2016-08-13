@@ -14,7 +14,7 @@ public class Intake {
 
     private Long id;
     /** Not-null value. */
-    private String date;
+    private java.util.Date date;
     private int weight;
     private long foodId;
 
@@ -38,7 +38,7 @@ public class Intake {
         this.id = id;
     }
 
-    public Intake(Long id, String date, int weight, long foodId) {
+    public Intake(Long id, java.util.Date date, int weight, long foodId) {
         this.id = id;
         this.date = date;
         this.weight = weight;
@@ -60,12 +60,12 @@ public class Intake {
     }
 
     /** Not-null value. */
-    public String getDate() {
+    public java.util.Date getDate() {
         return date;
     }
 
     /** Not-null value; ensure this value is available before it is saved to the database. */
-    public void setDate(String date) {
+    public void setDate(java.util.Date date) {
         this.date = date;
     }
 

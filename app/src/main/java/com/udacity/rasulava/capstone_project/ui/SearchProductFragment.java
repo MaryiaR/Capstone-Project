@@ -52,6 +52,7 @@ public class SearchProductFragment extends Fragment implements OnProductsSearchL
     TextView emptyTextTextView;
 
     private SearchProductAdapter adapter;
+    private DBHelper dbHelper;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,7 +65,7 @@ public class SearchProductFragment extends Fragment implements OnProductsSearchL
 
         View rootView = inflater.inflate(R.layout.fragment_search_product, container, false);
         ButterKnife.bind(this, rootView);
-
+        dbHelper = new DBHelper(getActivity());
         ArrayList<FoodSearch> locationListAdapterContainers = new ArrayList<>();
         adapter = new SearchProductAdapter(getActivity(), locationListAdapterContainers, this);
         //Calling addFooterView() before setting the adapter and calling removeFooterView() after it is a workaround to get the footer view displayed on Android prior to 4.4 (19)
@@ -130,10 +131,10 @@ public class SearchProductFragment extends Fragment implements OnProductsSearchL
                 if (food.getProductInDb() != null) {
                     //add to day intake
                     Intake intake = new Intake();
-                    intake.setDate(Utils.dateToString(new Date()));
+                    intake.setDate(new Date());
                     intake.setProduct(food.getProductInDb());
                     intake.setWeight(weight);
-                    DBHelper.getInstance(getActivity()).save(intake);
+                    dbHelper.save(intake);
 
                     Intent intent = new Intent();
                     getActivity().setResult(Activity.RESULT_OK, intent);
@@ -150,13 +151,13 @@ public class SearchProductFragment extends Fragment implements OnProductsSearchL
                                 product.setFat((int) Double.parseDouble(serving.getFat()));
                                 product.setCarbohydrate((int) Double.parseDouble(serving.getCarbohydrate()));
                                 product.setProtein((int) Double.parseDouble(serving.getProtein()));
-                                product.setId(DBHelper.getInstance(getActivity()).save(product));
+                                product.setId(dbHelper.save(product));
 
                                 Intake intake = new Intake();
-                                intake.setDate(Utils.dateToString(new Date()));
+                                intake.setDate(new Date());
                                 intake.setProduct(product);
                                 intake.setWeight(weight);
-                                DBHelper.getInstance(getActivity()).save(intake);
+                                dbHelper.save(intake);
 
                                 Intent intent = new Intent();
                                 getActivity().setResult(Activity.RESULT_OK, intent);

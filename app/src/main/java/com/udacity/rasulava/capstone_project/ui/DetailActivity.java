@@ -6,6 +6,8 @@ import android.support.v7.widget.Toolbar;
 
 import com.udacity.rasulava.capstone_project.R;
 
+import java.util.Date;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -19,7 +21,7 @@ public class DetailActivity extends AppCompatActivity {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
-    private String date;
+    private Date date;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,22 +36,22 @@ public class DetailActivity extends AppCompatActivity {
                 getSupportFragmentManager().findFragmentById(R.id.fragment_details);
 
         if (getIntent().hasExtra(EXTRA_DATE)) {
-            date = getIntent().getStringExtra(EXTRA_DATE);
+            date = (Date) getIntent().getSerializableExtra(EXTRA_DATE);
             detailsFragment.setDate(date);
         } else if (savedInstanceState != null) {
-            date = savedInstanceState.getString(EXTRA_DATE);
+            date = (Date) savedInstanceState.getSerializable(EXTRA_DATE);
             detailsFragment.setDate(date);
         } else finish();
     }
 
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putString(EXTRA_DATE, date);
+        outState.putSerializable(EXTRA_DATE, date);
         super.onSaveInstanceState(outState);
     }
 
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        date = savedInstanceState.getString(EXTRA_DATE);
+        date = (Date) savedInstanceState.getSerializable(EXTRA_DATE);
     }
 
 }

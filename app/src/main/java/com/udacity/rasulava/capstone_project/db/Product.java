@@ -4,7 +4,6 @@ package com.udacity.rasulava.capstone_project.db;
 
 // KEEP INCLUDES - put your custom includes here
 // KEEP INCLUDES END
-
 /**
  * Entity mapped to table "PRODUCT".
  */

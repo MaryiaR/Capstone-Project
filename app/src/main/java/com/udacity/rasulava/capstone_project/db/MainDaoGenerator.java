@@ -46,7 +46,7 @@ public class MainDaoGenerator {
     private static Entity addIntake(final Schema schema) {
         Entity history = schema.addEntity("Intake");
         history.addIdProperty().primaryKey().autoincrement();
-        history.addStringProperty("date").notNull();
+        history.addDateProperty("date").notNull();
         history.addIntProperty("weight").notNull();
         return history;
     }

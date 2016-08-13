@@ -3,9 +3,11 @@ package com.udacity.rasulava.capstone_project.db;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.udacity.rasulava.capstone_project.Utils;
 import com.udacity.rasulava.capstone_project.model.IntakeItem;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import de.greenrobot.dao.query.QueryBuilder;
@@ -23,56 +25,77 @@ public class DBHelper {
 
     private static DBHelper instance;
 
-    private DBHelper() {
+    private SQLiteDatabase db;
+
+    private Context context;
+
+    public DBHelper(Context context) {
+        this.context = context;
+        setupDb();
+        closeDb();
     }
 
-    public static DBHelper getInstance(Context context) {
-        if (instance == null) {
-            instance = new DBHelper();
-            instance.init(context);
-        }
-        return instance;
-    }
-
-    public void init(Context context) {
-        setupDb(context);
-    }
-
-    public void setupDb(Context context) {
+    public void setupDb() {
         DaoMaster.DevOpenHelper masterHelper = new DaoMaster.DevOpenHelper(context, DB_NAME, null);
-        SQLiteDatabase db = masterHelper.getWritableDatabase();
+        db = masterHelper.getWritableDatabase();
         DaoMaster master = new DaoMaster(db);
         DaoSession masterSession = master.newSession();
         intakeDao = masterSession.getIntakeDao();
         productDao = masterSession.getProductDao();
     }
 
+    private void closeDb() {
+        db.close();
+    }
+
     public List<Product> getProductsByName(String name) {
-        List<Product> productList = productDao.queryBuilder().where(ProductDao.Properties.Name.like(name + "%")).build().list();
+        setupDb();
+        List<Product> productList = productDao.queryBuilder().where(ProductDao.Properties.Name.like("%" + name + "%")).build().list();
+        closeDb();
         return productList;
     }
 
-    public List<IntakeItem> getHistoryForDate(String date) {
-        QueryBuilder<Intake> queryBuilder = intakeDao.queryBuilder().where(IntakeDao.Properties.Date.eq(date));
+    public List<IntakeItem> getHistoryForDate(Date date) {
+        setupDb();
+        QueryBuilder<Intake> queryBuilder = intakeDao.queryBuilder().where(IntakeDao.Properties.Date.eq(Utils.roundDateToDay(date)));
         List<Intake> dbIntakeList = queryBuilder.build().list();
         List<IntakeItem> intakeList = new ArrayList<>();
         for (Intake dbIntake : dbIntakeList) {
             intakeList.add(new IntakeItem(dbIntake));
         }
-
+        closeDb();
         return intakeList;
     }
 
 
     public long save(Product product) {
-        return productDao.insert(product);
+        setupDb();
+        long id = productDao.insert(product);
+        closeDb();
+        return id;
     }
 
-    public long save(Intake history) {
-        return intakeDao.insert(history);
+    public long save(Intake intake) {
+        setupDb();
+        Date date = Utils.roundDateToDay(intake.getDate());
+        intake.setDate(date);
+        long id = intakeDao.insert(intake);
+        closeDb();
+        return id;
     }
+
+    public void deleteOldData() {
+        setupDb();
+        Date weekAgoDate = Utils.getDateWeekAgo();
+        List<Intake> intakes = intakeDao.queryBuilder().where(IntakeDao.Properties.Date.le(weekAgoDate)).list();
+        intakeDao.deleteInTx(intakes);
+        closeDb();
+    }
+
 
     public void delete(Long intakeId) {
+        setupDb();
         intakeDao.deleteByKey(intakeId);
+        closeDb();
     }
 }

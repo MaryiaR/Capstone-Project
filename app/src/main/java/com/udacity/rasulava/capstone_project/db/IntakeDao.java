@@ -27,7 +27,7 @@ public class IntakeDao extends AbstractDao<Intake, Long> {
     */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property Date = new Property(1, String.class, "date", false, "DATE");
+        public final static Property Date = new Property(1, java.util.Date.class, "date", false, "DATE");
         public final static Property Weight = new Property(2, int.class, "weight", false, "WEIGHT");
         public final static Property FoodId = new Property(3, long.class, "foodId", false, "FOOD_ID");
     };
@@ -49,7 +49,7 @@ public class IntakeDao extends AbstractDao<Intake, Long> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"INTAKE\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
-                "\"DATE\" TEXT NOT NULL ," + // 1: date
+                "\"DATE\" INTEGER NOT NULL ," + // 1: date
                 "\"WEIGHT\" INTEGER NOT NULL ," + // 2: weight
                 "\"FOOD_ID\" INTEGER NOT NULL );"); // 3: foodId
     }
@@ -69,7 +69,7 @@ public class IntakeDao extends AbstractDao<Intake, Long> {
         if (id != null) {
             stmt.bindLong(1, id);
         }
-        stmt.bindString(2, entity.getDate());
+        stmt.bindLong(2, entity.getDate().getTime());
         stmt.bindLong(3, entity.getWeight());
         stmt.bindLong(4, entity.getFoodId());
     }
@@ -91,7 +91,7 @@ public class IntakeDao extends AbstractDao<Intake, Long> {
     public Intake readEntity(Cursor cursor, int offset) {
         Intake entity = new Intake( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.getString(offset + 1), // date
+            new java.util.Date(cursor.getLong(offset + 1)), // date
             cursor.getInt(offset + 2), // weight
             cursor.getLong(offset + 3) // foodId
         );
@@ -102,7 +102,7 @@ public class IntakeDao extends AbstractDao<Intake, Long> {
     @Override
     public void readEntity(Cursor cursor, Intake entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setDate(cursor.getString(offset + 1));
+        entity.setDate(new java.util.Date(cursor.getLong(offset + 1)));
         entity.setWeight(cursor.getInt(offset + 2));
         entity.setFoodId(cursor.getLong(offset + 3));
      }

@@ -144,7 +144,7 @@ public class MainFragment extends Fragment {
                 return;
             } else {
                 HistoryItem item = list.get(position - 1);
-                holder.tvDate.setText(item.getDate());
+                holder.tvDate.setText(Utils.dateToString(item.getDate()));
                 holder.tvKcal.setText(getString(R.string.history_kcal, item.getKcal()));
                 holder.tvFcp.setText(getString(R.string.history_fcp, item.getFat(), item.getCarbs(), item.getProtein()));
             }
@@ -205,15 +205,15 @@ public class MainFragment extends Fragment {
     }
 
     interface OnDayClickListener {
-        void onDayClick(int pos, String date);
+        void onDayClick(int pos, Date date);
     }
 
     @OnClick(R.id.toolbar)
     public void showDetails(View view) {
-        listener.onDayClick(0, Utils.dateToString(new Date()));
+        listener.onDayClick(0, new Date());
     }
 
-    private String getDateForPosition(int pos) {
+    private Date getDateForPosition(int pos) {
         return adapter.getItem(pos).getDate();
     }
 }

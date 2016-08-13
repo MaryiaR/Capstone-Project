@@ -11,7 +11,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.udacity.rasulava.capstone_project.R;
-import com.udacity.rasulava.capstone_project.Utils;
 import com.udacity.rasulava.capstone_project.db.DBHelper;
 import com.udacity.rasulava.capstone_project.db.Intake;
 import com.udacity.rasulava.capstone_project.db.Product;
@@ -45,11 +44,13 @@ public class AddProductFragment extends DialogFragment {
 
     private OnDismissListener listener;
 
+    private DBHelper dbHelper;
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_add_product, null);
         ButterKnife.bind(this, rootView);
-
+        dbHelper = new DBHelper(getActivity());
         etFat.setFilters(new InputFilter[]{new InputFilterMinMax()});
         etCarb.setFilters(new InputFilter[]{new InputFilterMinMax()});
         etProt.setFilters(new InputFilter[]{new InputFilterMinMax()});
@@ -63,13 +64,13 @@ public class AddProductFragment extends DialogFragment {
                 product.setCarbohydrate(Integer.parseInt(etCarb.getText().toString()));
                 product.setProtein(Integer.parseInt(etProt.getText().toString()));
 
-                product.setId(DBHelper.getInstance(getActivity()).save(product));
+                product.setId(dbHelper.save(product));
 
                 Intake intake = new Intake();
-                intake.setDate(Utils.dateToString(new Date()));
+                intake.setDate(new Date());
                 intake.setProduct(product);
                 intake.setWeight(weight);
-                DBHelper.getInstance(getActivity()).save(intake);
+                dbHelper.save(intake);
                 getActivity().finish();
             }
         };

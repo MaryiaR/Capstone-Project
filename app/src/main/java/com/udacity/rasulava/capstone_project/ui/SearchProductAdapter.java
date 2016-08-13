@@ -29,6 +29,7 @@ import butterknife.OnClick;
  */
 public class SearchProductAdapter extends ArrayAdapter<FoodSearch> {
 
+    private final DBHelper dbHelper;
     private Activity context;
     private LayoutInflater inflater;
     private Filter filter;
@@ -38,6 +39,7 @@ public class SearchProductAdapter extends ArrayAdapter<FoodSearch> {
     public SearchProductAdapter(Activity context, List<FoodSearch> listAdapterContainers, OnProductsSearchListener listener) {
         super(context, 0, listAdapterContainers);
         this.context = context;
+        dbHelper = new DBHelper(context);
         filter = new ProductFilter();
         inflater = LayoutInflater.from(this.context);
         this.listener = listener;
@@ -97,7 +99,7 @@ public class SearchProductAdapter extends ArrayAdapter<FoodSearch> {
             if (!TextUtils.isEmpty(constraint)) {
                 String filterString = constraint.toString().toLowerCase();
 
-                List<Product> list = DBHelper.getInstance(context).getProductsByName(filterString);
+                List<Product> list = dbHelper.getProductsByName(filterString);
                 for (Product product : list) {
                     resultList.add(new FoodSearch(product));
                 }
@@ -105,7 +107,9 @@ public class SearchProductAdapter extends ArrayAdapter<FoodSearch> {
 
                 List<ResponseFood> responseList = new RequestHelper().getFood(context, filterString);
                 for (ResponseFood food : responseList) {
-                    resultList.add(new FoodSearch(food));
+                    FoodSearch foodSearch = new FoodSearch(food);
+                    if (!resultList.contains(foodSearch))
+                        resultList.add(foodSearch);
                 }
 
             }
