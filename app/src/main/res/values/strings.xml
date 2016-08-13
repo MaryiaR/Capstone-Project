@@ -41,6 +41,8 @@
     <string name="date_today">Today, %s</string>
     <string name="date">Date</string>
     <string name="fcp">Fat/Carbs/Protein</string>
+    <string name="delete_item">Delete %s?</string>
+    <string name="ok">Ok</string>
 
     <string-array name="exercise_array">
         <item>Little/no exercise</item>

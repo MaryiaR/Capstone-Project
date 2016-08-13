@@ -14,7 +14,8 @@ import android.widget.TextView;
 import com.udacity.rasulava.capstone_project.RequestHelper;
 import com.udacity.rasulava.capstone_project.db.DBHelper;
 import com.udacity.rasulava.capstone_project.db.Product;
-import com.udacity.rasulava.capstone_project.model.Food;
+import com.udacity.rasulava.capstone_project.model.FoodSearch;
+import com.udacity.rasulava.capstone_project.model.response.ResponseFood;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +27,7 @@ import butterknife.OnClick;
 /**
  * Created by mrasulava on 8/10/2016.
  */
-public class SearchProductAdapter extends ArrayAdapter<Food> {
+public class SearchProductAdapter extends ArrayAdapter<FoodSearch> {
 
     private Activity context;
     private LayoutInflater inflater;
@@ -34,7 +35,7 @@ public class SearchProductAdapter extends ArrayAdapter<Food> {
     private String TAG = SearchProductAdapter.class.getSimpleName();
     private OnProductsSearchListener listener;
 
-    public SearchProductAdapter(Activity context, List<Food> listAdapterContainers, OnProductsSearchListener listener) {
+    public SearchProductAdapter(Activity context, List<FoodSearch> listAdapterContainers, OnProductsSearchListener listener) {
         super(context, 0, listAdapterContainers);
         this.context = context;
         filter = new ProductFilter();
@@ -57,7 +58,7 @@ public class SearchProductAdapter extends ArrayAdapter<Food> {
         }
         SearchViewHolder vh = (SearchViewHolder) v.getTag();
         vh.position = position;
-        Food food = getItem(position);
+        FoodSearch food = getItem(position);
         vh.text.setText(food.getName());
         return v;
     }
@@ -81,7 +82,7 @@ public class SearchProductAdapter extends ArrayAdapter<Food> {
 
         @OnClick(android.R.id.text1)
         public void onClick(View view) {
-            listener.onProductSelected(getItem(position).getId(), getItem(position).getName());
+            listener.onProductSelected(getItem(position));
         }
     }
 
@@ -91,15 +92,24 @@ public class SearchProductAdapter extends ArrayAdapter<Food> {
         protected FilterResults performFiltering(CharSequence constraint) {
 
             FilterResults result = new FilterResults();
-            final List<Food> resultList = new ArrayList<>();
+            final List<FoodSearch> resultList = new ArrayList<>();
             // if constraint is empty return the original names
             if (!TextUtils.isEmpty(constraint)) {
                 String filterString = constraint.toString().toLowerCase();
-                resultList.addAll(new RequestHelper().getFood(context, filterString));
-            }
-            List<Product> list = DBHelper.getInstance(context).getProductsByName(constraint.toString());
 
-            Log.v("", "db list count " + list.size());
+                List<Product> list = DBHelper.getInstance(context).getProductsByName(filterString);
+                for (Product product : list) {
+                    resultList.add(new FoodSearch(product));
+                }
+                Log.v("", "db list count " + list.size());
+
+                List<ResponseFood> responseList = new RequestHelper().getFood(context, filterString);
+                for (ResponseFood food : responseList) {
+                    resultList.add(new FoodSearch(food));
+                }
+
+            }
+
             result.values = resultList;
             Log.v("", "Filtered count " + resultList.size());
             result.count = resultList.size();
@@ -111,13 +121,13 @@ public class SearchProductAdapter extends ArrayAdapter<Food> {
             clear();
 
             try {
-                List<Food> foodList = (List<Food>) results.values;
+                List<FoodSearch> foodList = (List<FoodSearch>) results.values;
                 if (results.count == 0)
                     listener.onSearchEmpty();
                 else
                     listener.onSearchSuccessful();
 
-                for (Food food : foodList) {
+                for (FoodSearch food : foodList) {
                     add(food);
                 }
                 notifyDataSetChanged();

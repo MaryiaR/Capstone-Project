@@ -6,9 +6,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 import com.udacity.rasulava.capstone_project.db.DBHelper;
-import com.udacity.rasulava.capstone_project.db.Intake;
-import com.udacity.rasulava.capstone_project.db.Product;
 import com.udacity.rasulava.capstone_project.model.HistoryItem;
+import com.udacity.rasulava.capstone_project.model.IntakeItem;
 import com.udacity.rasulava.capstone_project.model.UserData;
 
 import java.text.DateFormat;
@@ -37,9 +36,9 @@ public class Utils {
     private static final String PREFS_GOAL_KEY = "prefs_goal";
     private static final String PREFS_AGE_KEY = "prefs_age";
 
-
     /**
      * Uses Mifflin-St Jeor formula
+     *
      * @param userData
      * @return
      */
@@ -75,6 +74,13 @@ public class Utils {
         }
     }
 
+    private static HistoryItem createHistoryItem(Context context, String date) {
+        List<IntakeItem> dbIntakeList = DBHelper.getInstance(context).getHistoryForDate(date);
+        HistoryItem item = intakesToHistoryItem(dbIntakeList);
+        item.setDate(date);
+        return item;
+    }
+
     public static List<HistoryItem> getHistoryForAWeek(Context context) {
         List<HistoryItem> list = new ArrayList<>();
         calendar.setTime(new Date());
@@ -92,14 +98,8 @@ public class Utils {
         return createHistoryItem(context, Utils.dateToString(new Date()));
     }
 
-    private static HistoryItem createHistoryItem(Context context, String date) {
-        List<Intake> intakeList = DBHelper.getInstance(context).getHistoryForDate(date);
-        HistoryItem item = intakesToHistoryItem(intakeList);
-        item.setDate(date);
-        return item;
-    }
+    public static HistoryItem intakesToHistoryItem(List<IntakeItem> intakeList) {
 
-    public static HistoryItem intakesToHistoryItem(List<Intake> intakeList) {
         HistoryItem item = new HistoryItem();
         if (intakeList == null || intakeList.isEmpty()) {
             return item;
@@ -109,12 +109,11 @@ public class Utils {
         int carbsSum = 0;
         int protSum = 0;
         int kcalSum = 0;
-        for (Intake intake : intakeList) {
-            Product product = intake.getProduct();
-            fatSum += product.getFat();
-            carbsSum += product.getCarbohydrate();
-            protSum += product.getProtein();
-            kcalSum += product.getCalories();
+        for (IntakeItem intake : intakeList) {
+            fatSum += intake.getFat();
+            carbsSum += intake.getCarbs();
+            protSum += intake.getProtein();
+            kcalSum += intake.getKcal();
         }
         item.setCarbs(carbsSum);
         item.setFat(fatSum);

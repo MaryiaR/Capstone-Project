@@ -1,6 +1,8 @@
 package com.udacity.rasulava.capstone_project.ui;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -17,9 +19,8 @@ import com.github.lzyzsd.circleprogress.ArcProgress;
 import com.udacity.rasulava.capstone_project.R;
 import com.udacity.rasulava.capstone_project.Utils;
 import com.udacity.rasulava.capstone_project.db.DBHelper;
-import com.udacity.rasulava.capstone_project.db.Intake;
-import com.udacity.rasulava.capstone_project.db.Product;
 import com.udacity.rasulava.capstone_project.model.HistoryItem;
+import com.udacity.rasulava.capstone_project.model.IntakeItem;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -28,6 +29,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnLongClick;
 
 /**
  * Created by Maryia on 09.07.2016.
@@ -103,7 +105,7 @@ public class DetailsFragment extends Fragment {
     }
 
     private void updateData() {
-        List<Intake> list = DBHelper.getInstance(getActivity()).getHistoryForDate(date);
+        List<IntakeItem> list = DBHelper.getInstance(getActivity()).getHistoryForDate(date);
         HistoryItem item = Utils.intakesToHistoryItem(list);
         adapter.setList(list);
 
@@ -127,9 +129,9 @@ public class DetailsFragment extends Fragment {
 
         private static final int HEADER_VIEW = 1;
 
-        private List<Intake> list = new ArrayList<>();
+        private List<IntakeItem> list = new ArrayList<>();
 
-        public void setList(List<Intake> list) {
+        public void setList(List<IntakeItem> list) {
             this.list.clear();
             this.list.addAll(list);
             notifyDataSetChanged();
@@ -153,15 +155,14 @@ public class DetailsFragment extends Fragment {
             if (holder instanceof HeaderViewHolder) {
                 return;
             } else {
-                Intake item = list.get(position - 1);
-                Product product = item.getProduct();
+                IntakeItem item = list.get(position - 1);
 
-                holder.tvName.setText(product.getName());
+                holder.tvName.setText(item.getName());
                 holder.tvWeight.setText(String.valueOf(item.getWeight()));
-                holder.tvFat.setText(String.valueOf(product.getFat()));
-                holder.tvCarbs.setText(String.valueOf(product.getCarbohydrate()));
-                holder.tvProt.setText(String.valueOf(product.getProtein()));
-                holder.tvKcal.setText(String.valueOf(product.getCalories()));
+                holder.tvFat.setText(String.valueOf(item.getFat()));
+                holder.tvCarbs.setText(String.valueOf(item.getCarbs()));
+                holder.tvProt.setText(String.valueOf(item.getProtein()));
+                holder.tvKcal.setText(String.valueOf(item.getKcal()));
             }
         }
 
@@ -171,6 +172,10 @@ public class DetailsFragment extends Fragment {
                 return 0;
             }
             return list.size() + 1;
+        }
+
+        public IntakeItem getItem(int position) {
+            return list.get(position - 1);
         }
 
         @Override
@@ -186,6 +191,12 @@ public class DetailsFragment extends Fragment {
 
         public HeaderViewHolder(View itemView) {
             super(itemView);
+        }
+
+        @OnLongClick(R.id.ll_root)
+        public boolean onDeleteClick(View view) {
+
+            return true;
         }
     }
 
@@ -212,6 +223,26 @@ public class DetailsFragment extends Fragment {
         public IntakeViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+        }
+
+        @OnLongClick(R.id.ll_root)
+        public boolean onDeleteClick(View view) {
+            final IntakeItem intakeItem = adapter.getItem(getAdapterPosition());
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setMessage(getString(R.string.delete_item, intakeItem.getName()))
+                    .setCancelable(false)
+                    .setPositiveButton(getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    DBHelper.getInstance(getActivity()).delete(intakeItem.getId());
+                                    updateData();
+                                    dialog.cancel();
+                                }
+                            })
+                    .setNegativeButton(getString(R.string.cancel), null);
+            AlertDialog alert = builder.create();
+            alert.show();
+            return true;
         }
     }
 }

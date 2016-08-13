@@ -1,4 +1,4 @@
-package com.udacity.rasulava.capstone_project.model;
+package com.udacity.rasulava.capstone_project.model.response;
 
 import com.google.gson.annotations.SerializedName;
 

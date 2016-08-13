@@ -3,6 +3,9 @@ package com.udacity.rasulava.capstone_project.db;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.udacity.rasulava.capstone_project.model.IntakeItem;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import de.greenrobot.dao.query.QueryBuilder;
@@ -49,10 +52,15 @@ public class DBHelper {
         return productList;
     }
 
-    public List<Intake> getHistoryForDate(String date) {
+    public List<IntakeItem> getHistoryForDate(String date) {
         QueryBuilder<Intake> queryBuilder = intakeDao.queryBuilder().where(IntakeDao.Properties.Date.eq(date));
-        List<Intake> history = queryBuilder.build().list();
-        return history;
+        List<Intake> dbIntakeList = queryBuilder.build().list();
+        List<IntakeItem> intakeList = new ArrayList<>();
+        for (Intake dbIntake : dbIntakeList) {
+            intakeList.add(new IntakeItem(dbIntake));
+        }
+
+        return intakeList;
     }
 
 
@@ -62,5 +70,9 @@ public class DBHelper {
 
     public long save(Intake history) {
         return intakeDao.insert(history);
+    }
+
+    public void delete(Long intakeId) {
+        intakeDao.deleteByKey(intakeId);
     }
 }

@@ -1,5 +1,7 @@
 package com.udacity.rasulava.capstone_project.ui;
 
+import com.udacity.rasulava.capstone_project.model.FoodSearch;
+
 /**
  * Created by mrasulava on 8/11/2016.
  */
@@ -11,5 +13,5 @@ public interface OnProductsSearchListener {
 
     void onSearchFailed();
 
-    void onProductSelected(String foodId, String name);
+    void onProductSelected(FoodSearch food);
 }

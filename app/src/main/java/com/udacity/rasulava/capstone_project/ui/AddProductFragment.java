@@ -70,6 +70,7 @@ public class AddProductFragment extends DialogFragment {
                 intake.setProduct(product);
                 intake.setWeight(weight);
                 DBHelper.getInstance(getActivity()).save(intake);
+                getActivity().finish();
             }
         };
         return rootView;
@@ -101,7 +102,6 @@ public class AddProductFragment extends DialogFragment {
             else {
                 ProductWeightDialog dialog = ProductWeightDialog.createDialog(etName.getText().toString(), listener);
                 dialog.show(getFragmentManager(), "tag1");
-                dismiss();
             }
         }
     }

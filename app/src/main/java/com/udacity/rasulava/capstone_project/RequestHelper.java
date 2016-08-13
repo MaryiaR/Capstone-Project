@@ -9,9 +9,9 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.udacity.rasulava.capstone_project.model.Food;
-import com.udacity.rasulava.capstone_project.model.FoodDetails;
-import com.udacity.rasulava.capstone_project.model.FoodDetailsResponse;
+import com.udacity.rasulava.capstone_project.model.response.ResponseFood;
+import com.udacity.rasulava.capstone_project.model.response.FoodDetails;
+import com.udacity.rasulava.capstone_project.model.response.FoodDetailsResponse;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -155,12 +155,12 @@ public class RequestHelper {
      * @param name
      * @return
      */
-    public List<Food> getFood(Context context, String name) {
+    public List<ResponseFood> getFood(Context context, String name) {
 //        if (!Utils.haveInternetConnection(context)) {
 //            listener.onFailure();
 //            return;
 //        }
-        List<Food> resultList = new ArrayList<>();
+        List<ResponseFood> resultList = new ArrayList<>();
 
         HashMap<String, String> map = new HashMap<>();
         map.put("search_expression", name);
@@ -179,13 +179,13 @@ public class RequestHelper {
                             JSONArray foodArray = foods.optJSONArray("food");
                             if (foodArray != null) {
                                 Gson gson = new Gson();
-                                Type type = new TypeToken<List<Food>>() {
+                                Type type = new TypeToken<List<ResponseFood>>() {
                                 }.getType();
-                                List<Food> list = gson.fromJson(foodArray.toString(), type);
+                                List<ResponseFood> list = gson.fromJson(foodArray.toString(), type);
                                 resultList.addAll(list);
                             }
                         } else {
-                            resultList.add(new Gson().fromJson(food.toString(), Food.class));
+                            resultList.add(new Gson().fromJson(food.toString(), ResponseFood.class));
                         }
                     }
                 } catch (JSONException e) {

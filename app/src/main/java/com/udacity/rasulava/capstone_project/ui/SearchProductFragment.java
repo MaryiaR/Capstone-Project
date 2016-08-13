@@ -24,8 +24,8 @@ import com.udacity.rasulava.capstone_project.Utils;
 import com.udacity.rasulava.capstone_project.db.DBHelper;
 import com.udacity.rasulava.capstone_project.db.Intake;
 import com.udacity.rasulava.capstone_project.db.Product;
-import com.udacity.rasulava.capstone_project.model.Food;
-import com.udacity.rasulava.capstone_project.model.FoodDetails;
+import com.udacity.rasulava.capstone_project.model.FoodSearch;
+import com.udacity.rasulava.capstone_project.model.response.FoodDetails;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -66,7 +66,7 @@ public class SearchProductFragment extends Fragment implements OnProductsSearchL
         View rootView = inflater.inflate(R.layout.fragment_search_product, container, false);
         ButterKnife.bind(this, rootView);
 
-        ArrayList<Food> locationListAdapterContainers = new ArrayList<>();
+        ArrayList<FoodSearch> locationListAdapterContainers = new ArrayList<>();
         adapter = new SearchProductAdapter(getActivity(), locationListAdapterContainers, this);
         //Calling addFooterView() before setting the adapter and calling removeFooterView() after it is a workaround to get the footer view displayed on Android prior to 4.4 (19)
         searchListview.setAdapter(adapter);
@@ -124,49 +124,58 @@ public class SearchProductFragment extends Fragment implements OnProductsSearchL
     }
 
     @Override
-    public void onProductSelected(final String foodId, String name) {
-        ProductWeightDialog dialog = ProductWeightDialog.createDialog(name, new AddProductFragment.OnDismissListener() {
+    public void onProductSelected(final FoodSearch food) {
+        ProductWeightDialog dialog = ProductWeightDialog.createDialog(food.getName(), new AddProductFragment.OnDismissListener() {
             @Override
             public void onDismissed(final int weight) {
-                new RequestHelper().getFoodById(getActivity(), foodId, new ResultListener<FoodDetails>() {
-                    @Override
-                    public void onSuccess(FoodDetails result) {
-                        Product product = new Product();
-                        product.setName(result.getName());
-                        FoodDetails.Serving serving = result.get100grServing();
-                        if (serving != null) {
-                            product.setCalories(Integer.parseInt(serving.getCalories()));
-                            product.setFat((int) Double.parseDouble(serving.getFat()));
-                            product.setCarbohydrate((int) Double.parseDouble(serving.getCarbohydrate()));
-                            product.setProtein((int) Double.parseDouble(serving.getProtein()));
-                            product.setId(DBHelper.getInstance(getActivity()).save(product));
+                if (food.getProductInDb() != null) {
+                    //add to day intake
+                    Intake intake = new Intake();
+                    intake.setDate(Utils.dateToString(new Date()));
+                    intake.setProduct(food.getProductInDb());
+                    intake.setWeight(weight);
+                    DBHelper.getInstance(getActivity()).save(intake);
 
-                            Intake intake = new Intake();
-                            intake.setDate(Utils.dateToString(new Date()));
-                            intake.setProduct(product);
-                            intake.setWeight(weight);
-                            DBHelper.getInstance(getActivity()).save(intake);
+                    Intent intent = new Intent();
+                    getActivity().setResult(Activity.RESULT_OK, intent);
+                    getActivity().finish();
+                } else {
+                    new RequestHelper().getFoodById(getActivity(), food.getResponseFood().getId(), new ResultListener<FoodDetails>() {
+                        @Override
+                        public void onSuccess(FoodDetails result) {
+                            Product product = new Product();
+                            product.setName(result.getName());
+                            FoodDetails.Serving serving = result.get100grServing();
+                            if (serving != null) {
+                                product.setCalories(Integer.parseInt(serving.getCalories()));
+                                product.setFat((int) Double.parseDouble(serving.getFat()));
+                                product.setCarbohydrate((int) Double.parseDouble(serving.getCarbohydrate()));
+                                product.setProtein((int) Double.parseDouble(serving.getProtein()));
+                                product.setId(DBHelper.getInstance(getActivity()).save(product));
 
-                            Intent intent = new Intent();
-                            getActivity().setResult(Activity.RESULT_OK, intent);
-                            getActivity().finish();
+                                Intake intake = new Intake();
+                                intake.setDate(Utils.dateToString(new Date()));
+                                intake.setProduct(product);
+                                intake.setWeight(weight);
+                                DBHelper.getInstance(getActivity()).save(intake);
+
+                                Intent intent = new Intent();
+                                getActivity().setResult(Activity.RESULT_OK, intent);
+                                getActivity().finish();
+                            }
                         }
 
-                        Toast.makeText(getActivity(), result.getName(), Toast.LENGTH_LONG).show();
-                    }
+                        @Override
+                        public void onFailure() {
+                            Toast.makeText(getActivity(), "failed!", Toast.LENGTH_LONG).show();
 
-                    @Override
-                    public void onFailure() {
-                        Toast.makeText(getActivity(), "failed!", Toast.LENGTH_LONG).show();
-
-                    }
-                });
+                        }
+                    });
+                }
             }
         });
 
         dialog.show(getFragmentManager(), "tag1");
-
-
     }
 
     @OnClick(R.id.add_fab)

@@ -1,4 +1,4 @@
-package com.udacity.rasulava.capstone_project.model;
+package com.udacity.rasulava.capstone_project.model.response;
 
 /**
  * Created by mrasulava on 7/6/2016.
@@ -6,7 +6,7 @@ package com.udacity.rasulava.capstone_project.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Food {
+public class ResponseFood {
 
     @SerializedName("food_description")
     private String description;
