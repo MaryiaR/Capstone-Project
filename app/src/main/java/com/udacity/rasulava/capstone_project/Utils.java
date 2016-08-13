@@ -30,7 +30,7 @@ public class Utils {
     private static final DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
 
     private static final Calendar calendar = Calendar.getInstance();
-    private static final String PREFS_NAME = "user_prefs";
+    public static final String PREFS_NAME = "user_prefs";
 
     private static final String PREFS_KCAL_KEY = "prefs_kcal";
     private static final String PREFS_GENDER_KEY = "prefs_gender";
@@ -188,6 +188,7 @@ public class Utils {
         ed.putString(PREFS_GOAL_KEY, data.getGoal().name());
         ed.putInt(PREFS_KCAL_KEY, data.getKcal());
         ed.commit();
+        DataBackupAgent.requestBackup(context);
     }
 
     public static UserData getUserData(Context context) {
@@ -207,6 +208,4 @@ public class Utils {
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         return sharedPreferences.getInt(PREFS_KCAL_KEY, 0);
     }
-
-
 }

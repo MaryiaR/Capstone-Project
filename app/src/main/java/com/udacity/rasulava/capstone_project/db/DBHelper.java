@@ -3,6 +3,7 @@ package com.udacity.rasulava.capstone_project.db;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.udacity.rasulava.capstone_project.DataBackupAgent;
 import com.udacity.rasulava.capstone_project.Utils;
 import com.udacity.rasulava.capstone_project.model.IntakeItem;
 
@@ -17,7 +18,7 @@ import de.greenrobot.dao.query.QueryBuilder;
  */
 public class DBHelper {
 
-    private final String DB_NAME = "products_db";
+    public static final String DB_NAME = "products_db";
 
     private IntakeDao intakeDao;
 
@@ -72,6 +73,7 @@ public class DBHelper {
         setupDb();
         long id = productDao.insert(product);
         closeDb();
+        DataBackupAgent.requestBackup(context);
         return id;
     }
 
@@ -81,6 +83,7 @@ public class DBHelper {
         intake.setDate(date);
         long id = intakeDao.insert(intake);
         closeDb();
+        DataBackupAgent.requestBackup(context);
         return id;
     }
 
@@ -90,6 +93,7 @@ public class DBHelper {
         List<Intake> intakes = intakeDao.queryBuilder().where(IntakeDao.Properties.Date.le(weekAgoDate)).list();
         intakeDao.deleteInTx(intakes);
         closeDb();
+        DataBackupAgent.requestBackup(context);
     }
 
 
@@ -97,5 +101,6 @@ public class DBHelper {
         setupDb();
         intakeDao.deleteByKey(intakeId);
         closeDb();
+        DataBackupAgent.requestBackup(context);
     }
 }
