@@ -11,7 +11,13 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.udacity.rasulava.capstone_project.R;
-import com.udacity.rasulava.capstone_project.db.model.Product;
+import com.udacity.rasulava.capstone_project.Utils;
+import com.udacity.rasulava.capstone_project.db.DBHelper;
+import com.udacity.rasulava.capstone_project.db.Intake;
+import com.udacity.rasulava.capstone_project.db.Product;
+
+import java.io.Serializable;
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -37,6 +43,8 @@ public class AddProductFragment extends DialogFragment {
     @BindView(R.id.et_kcal)
     EditText etKcal;
 
+    private OnDismissListener listener;
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_add_product, null);
@@ -45,6 +53,25 @@ public class AddProductFragment extends DialogFragment {
         etFat.setFilters(new InputFilter[]{new InputFilterMinMax()});
         etCarb.setFilters(new InputFilter[]{new InputFilterMinMax()});
         etProt.setFilters(new InputFilter[]{new InputFilterMinMax()});
+        listener = new OnDismissListener() {
+            @Override
+            public void onDismissed(int weight) {
+                Product product = new Product();
+                product.setName(etName.getText().toString());
+                product.setCalories(Integer.parseInt(etKcal.getText().toString()));
+                product.setFat(Integer.parseInt(etFat.getText().toString()));
+                product.setCarbohydrate(Integer.parseInt(etCarb.getText().toString()));
+                product.setProtein(Integer.parseInt(etProt.getText().toString()));
+
+                product.setId(DBHelper.getInstance(getActivity()).save(product));
+
+                Intake intake = new Intake();
+                intake.setDate(Utils.dateToString(new Date()));
+                intake.setProduct(product);
+                intake.setWeight(weight);
+                DBHelper.getInstance(getActivity()).save(intake);
+            }
+        };
         return rootView;
     }
 
@@ -72,19 +99,7 @@ public class AddProductFragment extends DialogFragment {
             if (fat + carb + prot > 100)
                 Toast.makeText(getActivity(), "The total weight should not exceed 100 gr!", Toast.LENGTH_LONG).show();
             else {
-                Product product = new Product();
-                product.setName(etName.getText().toString());
-                product.setCalories(etKcal.getText().toString());
-                product.setFat(etFat.getText().toString());
-                product.setCarbohydrate(etCarb.getText().toString());
-                product.setProtein(etProt.getText().toString());
-
-                ProductWeightDialog dialog = new ProductWeightDialog();
-
-                Bundle args = new Bundle();
-                args.putSerializable("product", product);
-                dialog.setArguments(args);
-
+                ProductWeightDialog dialog = ProductWeightDialog.createDialog(etName.getText().toString(), listener);
                 dialog.show(getFragmentManager(), "tag1");
                 dismiss();
             }
@@ -110,5 +125,9 @@ public class AddProductFragment extends DialogFragment {
             }
             return "";
         }
+    }
+
+    interface OnDismissListener extends Serializable {
+        void onDismissed(int weight);
     }
 }

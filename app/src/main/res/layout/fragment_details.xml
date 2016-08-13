@@ -28,11 +28,11 @@
 
                 <TextView
                     android:id="@+id/tv_date"
+                    style="@style/TextStyleHeader"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true"
-                    android:text="Today" />
+                    android:layout_centerHorizontal="true" />
 
                 <com.github.lzyzsd.circleprogress.ArcProgress
                     android:id="@+id/arc_progress"
@@ -41,7 +41,7 @@
                     android:layout_below="@id/tv_date"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="@dimen/activity_vertical_margin"
-                    app:arc_progress="55"
+                    app:arc_finished_color="@color/colorAccent"
                     app:arc_suffix_text="kcal"
                     app:arc_text_size="@dimen/progress_text_size" />
 
@@ -50,82 +50,19 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/arc_progress"
-                    android:layout_centerHorizontal="true"
-                    android:text="Fat: 100g, Carbs: 100g, Protein: 100g" />
+                    android:layout_centerHorizontal="true" />
 
             </RelativeLayout>
         </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v4.widget.NestedScrollView
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_food"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        <TableLayout
-            android:id="@+id/tl_food"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:background="@color/colorPrimaryDark"
-            android:paddingBottom="@dimen/table_bottom_padding"
-            android:shrinkColumns="1"
-            android:stretchColumns="1">
-
-            <TableRow
-                android:layout_width="fill_parent"
-                android:layout_height="?android:attr/listPreferredItemHeight"
-                android:background="@android:color/transparent"
-                android:clickable="true"
-                android:focusable="true"
-                android:layout_marginBottom="1dp"
-                android:focusableInTouchMode="false">
-
-                <TextView
-                    android:id="@+id/tv_food_name"
-                    style="@style/TableCellHeaderTheme"
-                    android:layout_width="0dp"
-                    android:layout_weight="3"
-                    android:text="@string/food" />
-
-                <TextView
-                    android:id="@+id/tv_weight"
-                    style="@style/TableCellHeaderTheme"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:text="@string/weight" />
-
-                <TextView
-                    android:id="@+id/tv_fat"
-                    style="@style/TableCellHeaderTheme"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:text="@string/fat" />
-
-                <TextView
-                    android:id="@+id/tv_carbs"
-                    style="@style/TableCellHeaderTheme"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:text="@string/carbs" />
-
-                <TextView
-                    android:id="@+id/tv_prot"
-                    style="@style/TableCellHeaderTheme"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:text="@string/protein" />
-
-                <TextView
-                    android:id="@+id/tv_kcal"
-                    style="@style/TableCellHeaderTheme"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:text="@string/kcal" />
-            </TableRow>
-        </TableLayout>
-    </android.support.v4.widget.NestedScrollView>
+        android:background="@color/colorBg"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/add_fab"

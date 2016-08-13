@@ -40,10 +40,10 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignTop="@id/tv_age"
-            android:maxLength="3"
             android:gravity="center"
             android:hint="@string/years"
-            android:inputType="number" />
+            android:inputType="number"
+            android:maxLength="3" />
 
         <TextView
             android:id="@+id/tv_gender"
@@ -66,8 +66,8 @@
                 android:id="@+id/rb_female"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:checked="true"
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:checked="true"
                 android:text="@string/female" />
 
             <RadioButton
@@ -94,8 +94,8 @@
             android:layout_alignTop="@id/tv_weight"
             android:gravity="center"
             android:hint="@string/kilos"
-            android:maxLength="3"
-            android:inputType="number" />
+            android:inputType="number"
+            android:maxLength="3" />
 
         <TextView
             android:id="@+id/tv_height"
@@ -112,9 +112,9 @@
             android:layout_alignParentRight="true"
             android:layout_alignTop="@id/tv_height"
             android:gravity="center"
-            android:maxLength="3"
             android:hint="@string/cm"
-            android:inputType="number" />
+            android:inputType="number"
+            android:maxLength="3" />
 
         <LinearLayout
             android:id="@+id/ll_exercise"
@@ -129,6 +129,7 @@
                 android:layout_width="0dp"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="2"
+                android:gravity="left"
                 android:padding="@dimen/dialog_text_padding"
                 android:text="@string/exercise_level" />
 
@@ -153,6 +154,7 @@
                 android:layout_width="0dp"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="2"
+                android:gravity="left"
                 android:padding="@dimen/dialog_text_padding"
                 android:text="@string/goal" />
 

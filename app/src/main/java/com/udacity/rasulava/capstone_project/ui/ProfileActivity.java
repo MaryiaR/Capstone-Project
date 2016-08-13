@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 
 import com.udacity.rasulava.capstone_project.R;
 import com.udacity.rasulava.capstone_project.Utils;
+import com.udacity.rasulava.capstone_project.model.UserData;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -57,13 +59,23 @@ public class ProfileActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        tvKcal.setText(getString(R.string.total_kcal, 1200));
 
         ArrayAdapter<String> adapterExercise = createSpinnerAdapter(R.array.exercise_array);
         spinnerExercise.setAdapter(adapterExercise);
 
         ArrayAdapter<String> adapterGoal = createSpinnerAdapter(R.array.goals_array);
         spinnerGoal.setAdapter(adapterGoal);
+
+        UserData userData = Utils.getUserData(this);
+        if (userData.getAge() != 0) {
+            etAge.setText(String.valueOf(userData.getAge()), TextView.BufferType.EDITABLE);
+            rgGender.check(userData.getGender() == UserData.GENDER.FEMALE ? R.id.rb_female : R.id.rb_male);
+            etWeight.setText(String.valueOf(userData.getWeight()), TextView.BufferType.EDITABLE);
+            etHeight.setText(String.valueOf(userData.getHeight()), TextView.BufferType.EDITABLE);
+            spinnerExercise.setSelection(userData.getExercise().ordinal());
+            spinnerGoal.setSelection(userData.getGoal().ordinal());
+        }
+        tvKcal.setText(getString(R.string.total_kcal, userData.getKcal()));
     }
 
 
@@ -71,14 +83,18 @@ public class ProfileActivity extends AppCompatActivity {
     public void addProduct(View view) {
         if (!validate())
             return;
-        int age = Integer.parseInt(etAge.getText().toString());
-        Utils.GENDER gender = rgGender.getCheckedRadioButtonId() == R.id.rb_female ? Utils.GENDER.FEMALE : Utils.GENDER.MALE;
-        int weight = Integer.parseInt(etWeight.getText().toString());
-        int height = Integer.parseInt(etHeight.getText().toString());
-        Utils.EXERCISE exercise = Utils.EXERCISE.values()[spinnerExercise.getSelectedItemPosition()];
-        Utils.GOAL goal = Utils.GOAL.values()[spinnerGoal.getSelectedItemPosition()];
-        double kcal = Utils.getCaloriesNeed(gender, age, weight, height, exercise, goal);
+        UserData userData = new UserData();
+        userData.setAge(Integer.parseInt(etAge.getText().toString()));
+        userData.setGender(rgGender.getCheckedRadioButtonId() == R.id.rb_female ? UserData.GENDER.FEMALE : UserData.GENDER.MALE);
+        userData.setWeight(Integer.parseInt(etWeight.getText().toString()));
+        userData.setHeight(Integer.parseInt(etHeight.getText().toString()));
+        userData.setExercise(UserData.EXERCISE.values()[spinnerExercise.getSelectedItemPosition()]);
+        userData.setGoal(UserData.GOAL.values()[spinnerGoal.getSelectedItemPosition()]);
+        int kcal = Utils.getCaloriesNeed(userData);
+        userData.setKcal(kcal);
         tvKcal.setText(getString(R.string.total_kcal, kcal));
+
+        Utils.updateUserData(this, userData);
     }
 
     private boolean validate() {
@@ -113,5 +129,15 @@ public class ProfileActivity extends AppCompatActivity {
         };
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
+        switch (itemId) {
+            case android.R.id.home:
+                finish();
+                break;
 
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

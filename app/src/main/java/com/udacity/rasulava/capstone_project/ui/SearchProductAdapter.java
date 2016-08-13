@@ -12,6 +12,8 @@ import android.widget.Filter;
 import android.widget.TextView;
 
 import com.udacity.rasulava.capstone_project.RequestHelper;
+import com.udacity.rasulava.capstone_project.db.DBHelper;
+import com.udacity.rasulava.capstone_project.db.Product;
 import com.udacity.rasulava.capstone_project.model.Food;
 
 import java.util.ArrayList;
@@ -79,7 +81,7 @@ public class SearchProductAdapter extends ArrayAdapter<Food> {
 
         @OnClick(android.R.id.text1)
         public void onClick(View view) {
-            listener.onProductSelected(getItem(position).getId());
+            listener.onProductSelected(getItem(position).getId(), getItem(position).getName());
         }
     }
 
@@ -95,6 +97,9 @@ public class SearchProductAdapter extends ArrayAdapter<Food> {
                 String filterString = constraint.toString().toLowerCase();
                 resultList.addAll(new RequestHelper().getFood(context, filterString));
             }
+            List<Product> list = DBHelper.getInstance(context).getProductsByName(constraint.toString());
+
+            Log.v("", "db list count " + list.size());
             result.values = resultList;
             Log.v("", "Filtered count " + resultList.size());
             result.count = resultList.size();

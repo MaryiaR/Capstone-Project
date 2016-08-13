@@ -57,6 +57,11 @@ public class RequestHelper {
      * @return
      */
     public void getFoodById(final Context context, String id, final ResultListener<FoodDetails> listener) {
+        if (!Utils.haveInternetConnection(context)) {
+            listener.onFailure();
+            return;
+        }
+
         HashMap<String, String> map = new HashMap<>();
         map.put("food_id", id);
         URL url = getUrl(context, "food.get", map);
@@ -84,6 +89,54 @@ public class RequestHelper {
                 final String res = response.body().string();
                 Log.w(LOG_TAG, "response: " + res);
                 if (!TextUtils.isEmpty(res)) {
+                    try {
+                        final FoodDetails foods = new Gson().fromJson(res, FoodDetailsResponse.class).getFoods();
+                        List<FoodDetails.Serving> servingList = new ArrayList<>();
+                        FoodDetails.Servings servings = new FoodDetails.Servings();
+                        JSONObject jsonObject = new JSONObject(res);
+                        JSONObject servingsJson = jsonObject.optJSONObject("food").optJSONObject("servings");
+                        JSONObject serving = servingsJson.optJSONObject("serving");
+                        if (serving == null) {
+                            JSONArray servingArray = servingsJson.optJSONArray("serving");
+                            if (servingArray != null) {
+                                Gson gson = new Gson();
+                                Type type = new TypeToken<List<FoodDetails.Serving>>() {
+                                }.getType();
+                                List<FoodDetails.Serving> list = gson.fromJson(servingArray.toString(), type);
+                                servingList.addAll(list);
+                                servings.setServing(servingList);
+                                foods.setmServings(servings);
+                                mainHandler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        listener.onSuccess(foods);
+                                    }
+                                });
+                            } else {
+                                mainHandler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        listener.onFailure();
+                                    }
+                                });
+                            }
+                        } else {
+                            servingList.add(new Gson().fromJson(serving.toString(), FoodDetails.Serving.class));
+                            servings.setServing(servingList);
+                            foods.setmServings(servings);
+                            mainHandler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    listener.onSuccess(foods);
+                                }
+                            });
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                if (!TextUtils.isEmpty(res)) {
                     mainHandler.post(new Runnable() {
                         @Override
                         public void run() {
@@ -103,6 +156,10 @@ public class RequestHelper {
      * @return
      */
     public List<Food> getFood(Context context, String name) {
+//        if (!Utils.haveInternetConnection(context)) {
+//            listener.onFailure();
+//            return;
+//        }
         List<Food> resultList = new ArrayList<>();
 
         HashMap<String, String> map = new HashMap<>();

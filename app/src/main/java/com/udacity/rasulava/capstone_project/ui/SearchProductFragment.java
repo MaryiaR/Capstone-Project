@@ -15,11 +15,20 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.udacity.rasulava.capstone_project.R;
+import com.udacity.rasulava.capstone_project.RequestHelper;
+import com.udacity.rasulava.capstone_project.ResultListener;
+import com.udacity.rasulava.capstone_project.Utils;
+import com.udacity.rasulava.capstone_project.db.DBHelper;
+import com.udacity.rasulava.capstone_project.db.Intake;
+import com.udacity.rasulava.capstone_project.db.Product;
 import com.udacity.rasulava.capstone_project.model.Food;
+import com.udacity.rasulava.capstone_project.model.FoodDetails;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -115,11 +124,49 @@ public class SearchProductFragment extends Fragment implements OnProductsSearchL
     }
 
     @Override
-    public void onProductSelected(String foodId) {
-        Intent intent = new Intent();
-        intent.putExtra(DetailsFragment.EXTRA_FOOD_ID_SELECTED, foodId);
-        getActivity().setResult(Activity.RESULT_OK, intent);
-        getActivity().finish();
+    public void onProductSelected(final String foodId, String name) {
+        ProductWeightDialog dialog = ProductWeightDialog.createDialog(name, new AddProductFragment.OnDismissListener() {
+            @Override
+            public void onDismissed(final int weight) {
+                new RequestHelper().getFoodById(getActivity(), foodId, new ResultListener<FoodDetails>() {
+                    @Override
+                    public void onSuccess(FoodDetails result) {
+                        Product product = new Product();
+                        product.setName(result.getName());
+                        FoodDetails.Serving serving = result.get100grServing();
+                        if (serving != null) {
+                            product.setCalories(Integer.parseInt(serving.getCalories()));
+                            product.setFat((int) Double.parseDouble(serving.getFat()));
+                            product.setCarbohydrate((int) Double.parseDouble(serving.getCarbohydrate()));
+                            product.setProtein((int) Double.parseDouble(serving.getProtein()));
+                            product.setId(DBHelper.getInstance(getActivity()).save(product));
+
+                            Intake intake = new Intake();
+                            intake.setDate(Utils.dateToString(new Date()));
+                            intake.setProduct(product);
+                            intake.setWeight(weight);
+                            DBHelper.getInstance(getActivity()).save(intake);
+
+                            Intent intent = new Intent();
+                            getActivity().setResult(Activity.RESULT_OK, intent);
+                            getActivity().finish();
+                        }
+
+                        Toast.makeText(getActivity(), result.getName(), Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onFailure() {
+                        Toast.makeText(getActivity(), "failed!", Toast.LENGTH_LONG).show();
+
+                    }
+                });
+            }
+        });
+
+        dialog.show(getFragmentManager(), "tag1");
+
+
     }
 
     @OnClick(R.id.add_fab)

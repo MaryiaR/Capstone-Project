@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
@@ -18,9 +17,6 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnDa
 
     private static final String DETAILS_FRAGMENT_TAG = "DETAILS_TAG";
 
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-
     @Nullable
     @BindView(R.id.container_details)
     FrameLayout containerDetails;
@@ -32,10 +28,6 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnDa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-
         if (containerDetails != null) {
             mTwoPane = true;
             if (savedInstanceState == null) {
@@ -69,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnDa
 
 
     @Override
-    public void onDayClick(int pos) {
+    public void onDayClick(int pos, String date) {
         if (mTwoPane) {
             Bundle args = new Bundle();
             args.putInt(DetailsFragment.POS, pos);
@@ -82,6 +74,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnDa
                     .commit();
         } else {
             Intent intent = new Intent(this, DetailActivity.class);
+            intent.putExtra(DetailActivity.EXTRA_DATE, date);
             startActivity(intent);
         }
     }

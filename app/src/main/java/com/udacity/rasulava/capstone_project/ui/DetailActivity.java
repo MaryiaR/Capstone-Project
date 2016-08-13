@@ -14,8 +14,12 @@ import butterknife.ButterKnife;
  */
 public class DetailActivity extends AppCompatActivity {
 
+    public static final String EXTRA_DATE = "date";
+
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+
+    private String date;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +29,27 @@ public class DetailActivity extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        DetailsFragment detailsFragment = (DetailsFragment)
+                getSupportFragmentManager().findFragmentById(R.id.fragment_details);
+
+        if (getIntent().hasExtra(EXTRA_DATE)) {
+            date = getIntent().getStringExtra(EXTRA_DATE);
+            detailsFragment.setDate(date);
+        } else if (savedInstanceState != null) {
+            date = savedInstanceState.getString(EXTRA_DATE);
+            detailsFragment.setDate(date);
+        } else finish();
+    }
+
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putString(EXTRA_DATE, date);
+        super.onSaveInstanceState(outState);
+    }
+
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        date = savedInstanceState.getString(EXTRA_DATE);
     }
 
 }

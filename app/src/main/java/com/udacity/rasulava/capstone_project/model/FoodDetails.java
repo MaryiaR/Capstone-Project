@@ -21,8 +21,7 @@ public class FoodDetails {
     @SerializedName("food_url")
     private String url;
 
-    @SerializedName("servings")
-    private Servings servings;
+    private Servings mServings;
 
     public String getId() {
         return id;
@@ -56,17 +55,16 @@ public class FoodDetails {
         this.url = url;
     }
 
-    public Servings getServings() {
-        return servings;
+    public Servings getmServings() {
+        return mServings;
     }
 
-    public void setServings(Servings servings) {
-        this.servings = servings;
+    public void setmServings(Servings mServings) {
+        this.mServings = mServings;
     }
 
-    class Servings {
+    public static class Servings {
 
-        @SerializedName("serving")
         private List<Serving> serving;
 
         public List<Serving> getServing() {
@@ -78,7 +76,7 @@ public class FoodDetails {
         }
     }
 
-    class Serving {
+    public static class Serving {
 
         @SerializedName("serving_description")
         private String servingDescription;
@@ -147,4 +145,15 @@ public class FoodDetails {
         }
     }
 
+    public Serving get100grServing() {
+        if (mServings == null || mServings.getServing().isEmpty())
+            return null;
+        Serving serving = mServings.getServing().get(0);
+        for (Serving s : mServings.getServing()) {
+            if ("100 g".equalsIgnoreCase(s.getServingDescription())) {
+                return s;
+            }
+        }
+        return serving;
+    }
 }

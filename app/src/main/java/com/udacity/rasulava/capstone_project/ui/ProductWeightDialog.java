@@ -9,7 +9,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.udacity.rasulava.capstone_project.R;
-import com.udacity.rasulava.capstone_project.db.model.Product;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -20,20 +19,35 @@ import butterknife.OnClick;
  */
 public class ProductWeightDialog extends DialogFragment {
 
+    public static final String ARG_LISTENER = "listener";
+    public static final String ARG_NAME = "name";
+
     @BindView(R.id.tv_title)
     TextView tvTitle;
 
     @BindView(R.id.et_weight)
     EditText etWeight;
 
-    private Product product;
+    private AddProductFragment.OnDismissListener listener;
+
+    public static ProductWeightDialog createDialog(String name, AddProductFragment.OnDismissListener listener) {
+        ProductWeightDialog dialog = new ProductWeightDialog();
+
+        Bundle args = new Bundle();
+        args.putSerializable(ProductWeightDialog.ARG_LISTENER, listener);
+        args.putString(ProductWeightDialog.ARG_NAME, name);
+        dialog.setArguments(args);
+
+        return dialog;
+    }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.dialog_product_weight, null);
         ButterKnife.bind(this, rootView);
-        product = (Product) getArguments().getSerializable("product");
-        tvTitle.setText(getString(R.string.weight_dialog_title, product.getName()));
+        listener = (AddProductFragment.OnDismissListener) getArguments().getSerializable(ARG_LISTENER);
+        String name = getArguments().getString(ARG_NAME);
+        tvTitle.setText(getString(R.string.weight_dialog_title, name));
         return rootView;
     }
 
@@ -45,6 +59,7 @@ public class ProductWeightDialog extends DialogFragment {
             etWeight.setError(getString(R.string.error_empty_value));
         } else {
             int weight = Integer.parseInt(etWeight.getText().toString());
+            listener.onDismissed(weight);
             dismiss();
         }
 

@@ -34,7 +34,13 @@
     <string name="cm">Cm</string>
     <string name="exercise_level">Exercise level:</string>
     <string name="goal">Goal:</string>
-    <string name="total_kcal">Daily Calorie Needs: %s kcal</string>
+    <string name="total_kcal">Daily Calorie Needs: %d kcal</string>
+    <string name="history_fcp">%1$d/%2$d/%3$d</string>
+    <string name="history_kcal">%s kcal</string>
+    <string name="today_fcp">Fat: %1$d Carbohydrate: %2$d Protein: %3$d</string>
+    <string name="date_today">Today, %s</string>
+    <string name="date">Date</string>
+    <string name="fcp">Fat/Carbs/Protein</string>
 
     <string-array name="exercise_array">
         <item>Little/no exercise</item>

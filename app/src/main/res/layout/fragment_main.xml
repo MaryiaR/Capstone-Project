@@ -34,6 +34,7 @@
                         android:id="@+id/tv_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        style="@style/TextStyleHeader"
                         android:layout_alignParentTop="true"
                         android:layout_centerHorizontal="true"
                         android:text="Today" />
@@ -45,7 +46,7 @@
                         android:layout_below="@id/tv_date"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="@dimen/activity_vertical_margin"
-                        app:arc_progress="55"
+                        app:arc_progress="0"
                         app:arc_suffix_text="kcal"
                         app:arc_text_size="@dimen/progress_text_size" />
 
@@ -55,7 +56,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/arc_progress"
                         android:layout_centerHorizontal="true"
-                        android:text="Fat: 100g, Carbs: 100g, Protein: 100g" />
+                        android:text="Fat: 0g, Carbs: 0g, Protein: 0g" />
 
                 </RelativeLayout>
             </android.support.v7.widget.Toolbar>
@@ -64,6 +65,7 @@
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_history"
+            android:background="@color/colorBg"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />

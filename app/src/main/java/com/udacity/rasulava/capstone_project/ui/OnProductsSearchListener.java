@@ -11,5 +11,5 @@ public interface OnProductsSearchListener {
 
     void onSearchFailed();
 
-    void onProductSelected(String foodId);
+    void onProductSelected(String foodId, String name);
 }

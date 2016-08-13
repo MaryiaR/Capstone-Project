@@ -9,10 +9,8 @@
     </style>
 
     <style name="TableCellTheme" parent="android:Widget.TextView">
-        <item name="android:textColor">@android:color/white</item>
-        <item name="android:background">@color/colorCell</item>
+        <item name="android:textColor">@color/colorPrimaryDark</item>
         <item name="android:padding">5dp</item>
-        <item name="android:layout_margin">1dp</item>
         <item name="android:height">40dp</item>
         <item name="android:textSize">12sp</item>
         <item name="android:gravity">center_vertical|left</item>
@@ -20,7 +18,8 @@
 
     <style name="TableCellHeaderTheme" parent="TableCellTheme">
         <item name="android:textStyle">bold</item>
-        <item name="android:background">@color/colorAccent</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:background">@color/colorPrimaryDark</item>
     </style>
 
     <style name="TextStyleTitle" parent="TextStyle">
@@ -34,6 +33,15 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:padding">10dp</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="TextStyleHeader" parent="android:Widget.TextView">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:padding">5dp</item>
+        <item name="android:gravity">center</item>
     </style>
 
     <style name="SpinnerTextStyle" parent="TextStyle">
