@@ -40,7 +40,10 @@ public class DetailActivity extends TrackedActivity {
         } else if (savedInstanceState != null) {
             date = (Date) savedInstanceState.getSerializable(EXTRA_DATE);
             detailsFragment.setDate(date);
-        } else finish();
+        } else {
+            finish();
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+        }
     }
 
     protected void onSaveInstanceState(Bundle outState) {
@@ -51,6 +54,12 @@ public class DetailActivity extends TrackedActivity {
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         date = (Date) savedInstanceState.getSerializable(EXTRA_DATE);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
 }

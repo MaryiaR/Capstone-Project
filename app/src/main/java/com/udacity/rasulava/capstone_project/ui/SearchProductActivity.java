@@ -33,10 +33,17 @@ public class SearchProductActivity extends TrackedActivity {
         switch (itemId) {
             case android.R.id.home:
                 finish();
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 break;
 
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
 }

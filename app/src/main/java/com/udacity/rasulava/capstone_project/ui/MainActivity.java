@@ -7,7 +7,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import com.udacity.rasulava.capstone_project.CaloriesApplication;
 import com.udacity.rasulava.capstone_project.R;
@@ -71,6 +70,7 @@ public class MainActivity extends TrackedActivity implements OnDayClickListener 
         if (id == R.id.action_settings) {
             Intent intent = new Intent(this, ProfileActivity.class);
             startActivity(intent);
+            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -78,9 +78,10 @@ public class MainActivity extends TrackedActivity implements OnDayClickListener 
 
     @Optional
     @OnClick(R.id.btn_settings)
-    public void showDetails(View view) {
+    public void showSettings(View view) {
         Intent intent = new Intent(this, ProfileActivity.class);
         startActivity(intent);
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
     }
 
     @Override
@@ -91,6 +92,7 @@ public class MainActivity extends TrackedActivity implements OnDayClickListener 
             Intent intent = new Intent(this, DetailActivity.class);
             intent.putExtra(DetailActivity.EXTRA_DATE, date);
             startActivity(intent);
+            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
         }
     }
 

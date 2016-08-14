@@ -144,9 +144,16 @@ public class ProfileActivity extends TrackedActivity {
         switch (itemId) {
             case android.R.id.home:
                 finish();
-                break;
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                return true;
 
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 }

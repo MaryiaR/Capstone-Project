@@ -15,7 +15,7 @@ public class CaloriesApplication extends Application {
     synchronized public Tracker getDefaultTracker() {
         if (mTracker == null) {
             GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
-            mTracker = analytics.newTracker("YOUR ID");
+            mTracker = analytics.newTracker(getString(R.string.analytics_id));
         }
         return mTracker;
     }

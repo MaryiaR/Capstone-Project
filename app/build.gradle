@@ -16,6 +16,7 @@ android {
         resValue "string", "fatsecret_app_secret", "YOUR KEY"
         resValue "string", "banner_ad_unit_id", "YOUR KEY"
         resValue "string", "banner_ad_app_id", "YOUR KEY"
+        resValue "string", "analytics_id", "YOUR KEY"
     }
     buildTypes {
         release {

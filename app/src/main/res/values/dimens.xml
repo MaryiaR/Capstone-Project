@@ -4,6 +4,7 @@
     <dimen name="tablet_screen_horizontal_margin">100dp</dimen>
     <dimen name="tablet_screen_vertical_margin">60dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="widget_margin">5dp</dimen>
 
     <dimen name="appbar_elevation">4dp</dimen>
     <dimen name="detail_toolbar_height">280dp</dimen>

@@ -1,6 +1,5 @@
 package com.udacity.rasulava.capstone_project.ui;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -95,14 +94,7 @@ public class DetailsFragment extends Fragment {
     public void addProduct(View view) {
         Intent intent = new Intent(getActivity(), SearchProductActivity.class);
         startActivityForResult(intent, REQUEST_CODE_SEARCH);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_SEARCH && resultCode == Activity.RESULT_OK) {
-
-        }
+        getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
     }
 
     public void setDate(Date date) {

@@ -6,5 +6,6 @@
     <color name="colorCell">#80303F9F</color>
     <color name="colorBg">#5C6BC0</color>
     <color name="colorLimit">#880E4F</color>
+    <color name="tranparent_bg">#80ffffff</color>
     <drawable name="white">#ffffff</drawable>
 </resources>

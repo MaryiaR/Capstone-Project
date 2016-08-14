@@ -48,6 +48,9 @@
     <string name="settings">Settings</string>
     <string name="cd_weight">Weight in grams</string>
     <string name="cd_height">Height in cm</string>
+    <string name="widget_kcal">%1$d/%2$d kcal</string>
+
+    <string name="widget_name">Calories Counter Widget</string>
 
     <string-array name="exercise_array">
         <item>Little/no exercise</item>

@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.udacity.rasulava.capstone_project.DataBackupAgent;
 import com.udacity.rasulava.capstone_project.Utils;
 import com.udacity.rasulava.capstone_project.model.IntakeItem;
+import com.udacity.rasulava.capstone_project.ui.CaloriesWidgetProvider;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -84,6 +85,7 @@ public class DBHelper {
         long id = intakeDao.insert(intake);
         closeDb();
         DataBackupAgent.requestBackup(context);
+        CaloriesWidgetProvider.update(context);
         return id;
     }
 
@@ -107,5 +109,6 @@ public class DBHelper {
         intakeDao.deleteByKey(intakeId);
         closeDb();
         DataBackupAgent.requestBackup(context);
+        CaloriesWidgetProvider.update(context);
     }
 }
