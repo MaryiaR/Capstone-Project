@@ -72,6 +72,7 @@ public class AddProductFragment extends DialogFragment {
                 intake.setWeight(weight);
                 dbHelper.save(intake);
                 getActivity().finish();
+                getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }
         };
         return rootView;

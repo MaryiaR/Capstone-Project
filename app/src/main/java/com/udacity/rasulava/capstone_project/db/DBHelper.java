@@ -25,8 +25,6 @@ public class DBHelper {
 
     private ProductDao productDao;
 
-    private static DBHelper instance;
-
     private SQLiteDatabase db;
 
     private Context context;

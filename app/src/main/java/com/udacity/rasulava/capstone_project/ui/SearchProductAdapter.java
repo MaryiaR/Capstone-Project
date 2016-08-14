@@ -78,10 +78,6 @@ public class SearchProductAdapter extends ArrayAdapter<FoodSearch> {
             this.position = position;
         }
 
-        public void setPosition(int position) {
-            this.position = position;
-        }
-
         @OnClick(android.R.id.text1)
         public void onClick(View view) {
             listener.onProductSelected(getItem(position));
@@ -95,7 +91,6 @@ public class SearchProductAdapter extends ArrayAdapter<FoodSearch> {
 
             FilterResults result = new FilterResults();
             final List<FoodSearch> resultList = new ArrayList<>();
-            // if constraint is empty return the original names
             if (!TextUtils.isEmpty(constraint)) {
                 String filterString = constraint.toString().toLowerCase();
 
@@ -103,7 +98,6 @@ public class SearchProductAdapter extends ArrayAdapter<FoodSearch> {
                 for (Product product : list) {
                     resultList.add(new FoodSearch(product));
                 }
-                Log.v("", "db list count " + list.size());
 
                 List<ResponseFood> responseList = new RequestHelper().getFood(context, filterString);
                 for (ResponseFood food : responseList) {
@@ -115,7 +109,6 @@ public class SearchProductAdapter extends ArrayAdapter<FoodSearch> {
             }
 
             result.values = resultList;
-            Log.v("", "Filtered count " + resultList.size());
             result.count = resultList.size();
             return result;
         }
@@ -140,6 +133,5 @@ public class SearchProductAdapter extends ArrayAdapter<FoodSearch> {
             }
         }
     }
-
 }
 

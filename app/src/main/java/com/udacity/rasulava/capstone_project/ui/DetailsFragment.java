@@ -36,7 +36,6 @@ import butterknife.OnLongClick;
  */
 public class DetailsFragment extends Fragment {
 
-    public static final int REQUEST_CODE_SEARCH = 100;
     public static final String DATE = "date";
 
     @BindView(R.id.arc_progress)
@@ -93,7 +92,7 @@ public class DetailsFragment extends Fragment {
     @OnClick(R.id.add_fab)
     public void addProduct(View view) {
         Intent intent = new Intent(getActivity(), SearchProductActivity.class);
-        startActivityForResult(intent, REQUEST_CODE_SEARCH);
+        startActivity(intent);
         getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
     }
 

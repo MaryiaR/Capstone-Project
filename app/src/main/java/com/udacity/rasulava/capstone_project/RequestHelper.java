@@ -65,7 +65,6 @@ public class RequestHelper {
         HashMap<String, String> map = new HashMap<>();
         map.put("food_id", id);
         URL url = getUrl(context, "food.get", map);
-        Log.w(LOG_TAG, "url: " + url);
 
         Request request = new Request.Builder().url(url).build();
 
@@ -87,7 +86,6 @@ public class RequestHelper {
             @Override
             public void onResponse(Call call, final Response response) throws IOException {
                 final String res = response.body().string();
-                Log.w(LOG_TAG, "response: " + res);
                 if (!TextUtils.isEmpty(res)) {
                     try {
                         final FoodDetails foods = new Gson().fromJson(res, FoodDetailsResponse.class).getFoods();
@@ -239,7 +237,6 @@ public class RequestHelper {
         String s = join(p, "&");
         appSecret += "&";
         SecretKey sk = new SecretKeySpec(appSecret.getBytes(), HMAC_SHA1_ALGORITHM);
-        appSecret = appSecret.substring(0, appSecret.length() - 1);
         try {
             Mac m = Mac.getInstance(HMAC_SHA1_ALGORITHM);
             m.init(sk);

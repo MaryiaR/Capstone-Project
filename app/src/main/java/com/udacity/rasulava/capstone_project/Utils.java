@@ -20,7 +20,6 @@ import com.udacity.rasulava.capstone_project.model.IntakeItem;
 import com.udacity.rasulava.capstone_project.model.UserData;
 
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -108,15 +107,6 @@ public class Utils {
 
     public static String dateToString(Date date) {
         return dateFormat.format(date);
-    }
-
-    public static Date getDateFromString(String date) {
-        try {
-            return dateFormat.parse(date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return new Date();
-        }
     }
 
     public static Date getDateWeekAgo() {

@@ -1,8 +1,6 @@
 package com.udacity.rasulava.capstone_project.ui;
 
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -37,7 +35,6 @@ import butterknife.OnClick;
  * Created by mrasulava on 8/10/2016.
  */
 public class SearchProductFragment extends Fragment implements OnProductsSearchListener {
-    public static final String POS = "pos";
 
     @BindView(R.id.autocomplete_textview)
     EditText searchEditText;
@@ -68,7 +65,6 @@ public class SearchProductFragment extends Fragment implements OnProductsSearchL
         dbHelper = new DBHelper(getActivity());
         ArrayList<FoodSearch> locationListAdapterContainers = new ArrayList<>();
         adapter = new SearchProductAdapter(getActivity(), locationListAdapterContainers, this);
-        //Calling addFooterView() before setting the adapter and calling removeFooterView() after it is a workaround to get the footer view displayed on Android prior to 4.4 (19)
         searchListview.setAdapter(adapter);
         searchEditText.addTextChangedListener(new TextWatcher() {
 
@@ -129,16 +125,13 @@ public class SearchProductFragment extends Fragment implements OnProductsSearchL
             @Override
             public void onDismissed(final int weight) {
                 if (food.getProductInDb() != null) {
-                    //add to day intake
                     Intake intake = new Intake();
                     intake.setDate(new Date());
                     intake.setProduct(food.getProductInDb());
                     intake.setWeight(weight);
                     dbHelper.save(intake);
-
-                    Intent intent = new Intent();
-                    getActivity().setResult(Activity.RESULT_OK, intent);
                     getActivity().finish();
+                    getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 } else {
                     new RequestHelper().getFoodById(getActivity(), food.getResponseFood().getId(), new ResultListener<FoodDetails>() {
                         @Override
@@ -158,10 +151,8 @@ public class SearchProductFragment extends Fragment implements OnProductsSearchL
                                 intake.setProduct(product);
                                 intake.setWeight(weight);
                                 dbHelper.save(intake);
-
-                                Intent intent = new Intent();
-                                getActivity().setResult(Activity.RESULT_OK, intent);
                                 getActivity().finish();
+                                getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                             }
                         }
 
