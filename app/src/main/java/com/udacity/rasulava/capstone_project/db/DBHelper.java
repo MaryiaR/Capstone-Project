@@ -87,13 +87,18 @@ public class DBHelper {
         return id;
     }
 
-    public void deleteOldData() {
+    public boolean deleteOldData() {
+        boolean isSuccess = false;
         setupDb();
         Date weekAgoDate = Utils.getDateWeekAgo();
         List<Intake> intakes = intakeDao.queryBuilder().where(IntakeDao.Properties.Date.le(weekAgoDate)).list();
-        intakeDao.deleteInTx(intakes);
+        if (intakes != null && !intakes.isEmpty()) {
+            intakeDao.deleteInTx(intakes);
+            DataBackupAgent.requestBackup(context);
+            isSuccess = true;
+        }
         closeDb();
-        DataBackupAgent.requestBackup(context);
+        return isSuccess;
     }
 
 

@@ -1,5 +1,6 @@
 package com.udacity.rasulava.capstone_project;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -9,6 +10,10 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.provider.Settings;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.udacity.rasulava.capstone_project.db.DBHelper;
 import com.udacity.rasulava.capstone_project.model.HistoryItem;
 import com.udacity.rasulava.capstone_project.model.IntakeItem;
@@ -207,5 +212,25 @@ public class Utils {
     public static int getDailyKcal(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         return sharedPreferences.getInt(PREFS_KCAL_KEY, 0);
+    }
+
+    public static void trackEvent(CaloriesApplication application, String category, String action){
+        Tracker mTracker = application.getDefaultTracker();
+        mTracker.send(new HitBuilders.EventBuilder()
+                .setCategory(category)
+                .setAction(action)
+                .build());
+    }
+
+    public static boolean isGooglePlayServicesAvailable(Activity activity) {
+        GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
+        int status = googleApiAvailability.isGooglePlayServicesAvailable(activity);
+        if(status != ConnectionResult.SUCCESS) {
+            if(googleApiAvailability.isUserResolvableError(status)) {
+                googleApiAvailability.getErrorDialog(activity, status, 2404).show();
+            }
+            return false;
+        }
+        return true;
     }
 }

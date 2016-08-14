@@ -1,7 +1,6 @@
 package com.udacity.rasulava.capstone_project.ui;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -16,6 +15,7 @@ import android.widget.TextView;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
+import com.udacity.rasulava.capstone_project.CaloriesApplication;
 import com.udacity.rasulava.capstone_project.R;
 import com.udacity.rasulava.capstone_project.Utils;
 import com.udacity.rasulava.capstone_project.model.UserData;
@@ -27,7 +27,7 @@ import butterknife.OnClick;
 /**
  * Created by Maryia on 12.08.2016.
  */
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends TrackedActivity {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -86,7 +86,6 @@ public class ProfileActivity extends AppCompatActivity {
         tvKcal.setText(getString(R.string.total_kcal, userData.getKcal()));
     }
 
-
     @OnClick(R.id.btn_save)
     public void addProduct(View view) {
         if (!validate())
@@ -103,6 +102,7 @@ public class ProfileActivity extends AppCompatActivity {
         tvKcal.setText(getString(R.string.total_kcal, kcal));
 
         Utils.updateUserData(this, userData);
+        Utils.trackEvent((CaloriesApplication) getApplication(), "profile", "update");
     }
 
     private boolean validate() {

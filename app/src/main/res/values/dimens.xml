@@ -1,10 +1,13 @@
 <resources>
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="tablet_screen_horizontal_margin">100dp</dimen>
+    <dimen name="tablet_screen_vertical_margin">60dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
     <dimen name="appbar_elevation">4dp</dimen>
-    <dimen name="toolbar_height">280dp</dimen>
+    <dimen name="detail_toolbar_height">280dp</dimen>
+    <dimen name="toolbar_height">128dp</dimen>
     <dimen name="progress_bar_size">150dp</dimen>
     <dimen name="progress_text_size">30sp</dimen>
     <dimen name="progress_text_padding">0dp</dimen>
@@ -12,7 +15,7 @@
     <dimen name="fab_elevation">6dp</dimen>
     <dimen name="fab_press_translation_z">12dp</dimen>
     <dimen name="fab_margin">24dp</dimen>
-    <dimen name="table_bottom_padding">50dp</dimen>
+    <dimen name="tablet_settings_padding">50dp</dimen>
     <dimen name="et_fcp_width">100dp</dimen>
     <dimen name="dialog_padding">20dp</dimen>
     <dimen name="dialog_vertical_margin">20dp</dimen>

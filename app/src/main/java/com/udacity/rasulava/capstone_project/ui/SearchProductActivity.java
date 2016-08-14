@@ -1,7 +1,6 @@
 package com.udacity.rasulava.capstone_project.ui;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
@@ -14,7 +13,7 @@ import butterknife.ButterKnife;
 /**
  * Created by mrasulava on 8/10/2016.
  */
-public class SearchProductActivity extends AppCompatActivity {
+public class SearchProductActivity extends TrackedActivity {
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 

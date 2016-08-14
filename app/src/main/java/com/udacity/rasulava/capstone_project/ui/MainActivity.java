@@ -3,20 +3,25 @@ package com.udacity.rasulava.capstone_project.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
+import com.udacity.rasulava.capstone_project.CaloriesApplication;
 import com.udacity.rasulava.capstone_project.R;
+import com.udacity.rasulava.capstone_project.Utils;
 import com.udacity.rasulava.capstone_project.db.DBHelper;
 
 import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.Optional;
 
-public class MainActivity extends AppCompatActivity implements MainFragment.OnDayClickListener {
+public class MainActivity extends TrackedActivity implements OnDayClickListener {
 
     private static final String DETAILS_FRAGMENT_TAG = "DETAILS_TAG";
 
@@ -31,11 +36,19 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnDa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        new DBHelper(this).deleteOldData();
+        if (!Utils.isGooglePlayServicesAvailable(this))
+            Toast.makeText(this, "Google Play Store is missing.", Toast.LENGTH_LONG).show();
+        if (new DBHelper(this).deleteOldData())
+            Utils.trackEvent((CaloriesApplication) getApplication(), "db", "delete_old_data");
         if (containerDetails != null) {
             mTwoPane = true;
             if (savedInstanceState == null) {
+                Bundle args = new Bundle();
+                args.putSerializable(DetailsFragment.DATE, new Date());
+
                 DetailsFragment fragment = new DetailsFragment();
+                fragment.setArguments(args);
+
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.container_details, fragment, DETAILS_FRAGMENT_TAG)
                         .commit();
@@ -63,23 +76,22 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnDa
         return super.onOptionsItemSelected(item);
     }
 
+    @Optional
+    @OnClick(R.id.btn_settings)
+    public void showDetails(View view) {
+        Intent intent = new Intent(this, ProfileActivity.class);
+        startActivity(intent);
+    }
 
     @Override
     public void onDayClick(int pos, Date date) {
         if (mTwoPane) {
-            Bundle args = new Bundle();
-            args.putInt(DetailsFragment.POS, pos);
-
-            DetailsFragment fragment = new DetailsFragment();
-            fragment.setArguments(args);
-
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.container_details, fragment, DETAILS_FRAGMENT_TAG)
-                    .commit();
+            ((DetailsFragment) getSupportFragmentManager().findFragmentByTag(DETAILS_FRAGMENT_TAG)).setDate(date);
         } else {
             Intent intent = new Intent(this, DetailActivity.class);
             intent.putExtra(DetailActivity.EXTRA_DATE, date);
             startActivity(intent);
         }
     }
+
 }

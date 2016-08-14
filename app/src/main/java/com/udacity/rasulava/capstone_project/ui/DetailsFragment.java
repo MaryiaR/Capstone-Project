@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.github.lzyzsd.circleprogress.ArcProgress;
+import com.udacity.rasulava.capstone_project.CaloriesApplication;
 import com.udacity.rasulava.capstone_project.R;
 import com.udacity.rasulava.capstone_project.Utils;
 import com.udacity.rasulava.capstone_project.db.DBHelper;
@@ -38,6 +39,7 @@ public class DetailsFragment extends Fragment {
 
     public static final String POS = "pos";
     public static final int REQUEST_CODE_SEARCH = 100;
+    public static final String DATE = "date";
 
     @BindView(R.id.arc_progress)
     ArcProgress arcProgress;
@@ -75,6 +77,11 @@ public class DetailsFragment extends Fragment {
         adapter = new IntakeAdapter();
         mRecyclerView.setAdapter(adapter);
 
+        if (getArguments().getSerializable(DATE) != null) {
+            date = (Date) getArguments().getSerializable(DATE);
+            setDate(date);
+        }
+
         return rootView;
     }
 
@@ -102,11 +109,14 @@ public class DetailsFragment extends Fragment {
         this.date = date;
         if (!Utils.dateToString(new Date()).equalsIgnoreCase(Utils.dateToString(date))) {
             addFab.setVisibility(View.GONE);
-        }
+        } else
+            addFab.setVisibility(View.VISIBLE);
         updateData();
     }
 
     private void updateData() {
+        if (dbHelper == null)
+            dbHelper = new DBHelper(getActivity());
         List<IntakeItem> list = dbHelper.getHistoryForDate(date);
         HistoryItem item = Utils.intakesToHistoryItem(list);
         adapter.setList(list);
@@ -238,6 +248,7 @@ public class DetailsFragment extends Fragment {
                                 public void onClick(DialogInterface dialog, int id) {
                                     dbHelper.delete(intakeItem.getId());
                                     updateData();
+                                    Utils.trackEvent((CaloriesApplication) getActivity().getApplication(), "db", "delete_intake");
                                     dialog.cancel();
                                 }
                             })

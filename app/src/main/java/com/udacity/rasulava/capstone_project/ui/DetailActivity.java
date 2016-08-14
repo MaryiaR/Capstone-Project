@@ -1,7 +1,6 @@
 package com.udacity.rasulava.capstone_project.ui;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import com.udacity.rasulava.capstone_project.R;
@@ -14,7 +13,7 @@ import butterknife.ButterKnife;
 /**
  * Created by Maryia on 09.07.2016.
  */
-public class DetailActivity extends AppCompatActivity {
+public class DetailActivity extends TrackedActivity {
 
     public static final String EXTRA_DATE = "date";
 
