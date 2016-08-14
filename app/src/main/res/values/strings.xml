@@ -46,6 +46,8 @@
     <string name="no_connection_warning">No internet access. Only offline search is available.</string>
     <string name="no_connection_error">Something went wrong. Check your internet connection and try again.</string>
     <string name="settings">Settings</string>
+    <string name="cd_weight">Weight in grams</string>
+    <string name="cd_height">Height in cm</string>
 
     <string-array name="exercise_array">
         <item>Little/no exercise</item>

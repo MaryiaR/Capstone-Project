@@ -10,6 +10,7 @@ import com.google.android.gms.analytics.Tracker;
  */
 public class CaloriesApplication extends Application {
     private Tracker mTracker;
+    private boolean googleServicesAvailable = true;
 
     synchronized public Tracker getDefaultTracker() {
         if (mTracker == null) {
@@ -17,5 +18,13 @@ public class CaloriesApplication extends Application {
             mTracker = analytics.newTracker("YOUR ID");
         }
         return mTracker;
+    }
+
+    public boolean isGoogleServicesAvailable() {
+        return googleServicesAvailable;
+    }
+
+    public void setGoogleServicesAvailable(boolean googleServicesAvailable) {
+        this.googleServicesAvailable = googleServicesAvailable;
     }
 }

@@ -61,12 +61,13 @@ public class ProfileActivity extends TrackedActivity {
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        MobileAds.initialize(getApplicationContext(), getString(R.string.banner_ad_app_id));
-        AdView mAdView = (AdView) findViewById(R.id.adView);
-        AdRequest.Builder builder = new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR);
-        AdRequest adRequest = builder.build();
-        mAdView.loadAd(adRequest);
+        if (((CaloriesApplication) getApplication()).isGoogleServicesAvailable()) {
+            MobileAds.initialize(getApplicationContext(), getString(R.string.banner_ad_app_id));
+            AdView mAdView = (AdView) findViewById(R.id.adView);
+            AdRequest.Builder builder = new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR);
+            AdRequest adRequest = builder.build();
+            mAdView.loadAd(adRequest);
+        }
 
         ArrayAdapter<String> adapterExercise = createSpinnerAdapter(R.array.exercise_array);
         spinnerExercise.setAdapter(adapterExercise);

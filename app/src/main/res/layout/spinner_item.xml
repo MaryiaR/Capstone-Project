@@ -2,6 +2,6 @@
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+android:id/text1"
     style="@style/SpinnerTextStyle"
-    android:gravity="left"
+    android:gravity="start"
     android:ellipsize="end"
     android:singleLine="true" />

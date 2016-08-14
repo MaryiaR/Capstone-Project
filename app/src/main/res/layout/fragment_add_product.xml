@@ -34,6 +34,7 @@
         android:layout_width="@dimen/et_fcp_width"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignTop="@id/tv_fat"
         android:gravity="center"
         android:inputType="numberDecimal" />
@@ -52,6 +53,7 @@
         android:layout_width="@dimen/et_fcp_width"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignTop="@id/tv_carbs"
         android:gravity="center"
         android:inputType="numberDecimal" />
@@ -70,6 +72,7 @@
         android:layout_width="@dimen/et_fcp_width"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignTop="@id/tv_prot"
         android:gravity="center"
         android:inputType="numberDecimal" />
@@ -88,6 +91,7 @@
         android:layout_width="@dimen/et_fcp_width"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignTop="@id/tv_kcal"
         android:gravity="center"
         android:maxLength="5"
@@ -98,7 +102,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_kcal"
         android:layout_marginTop="@dimen/dialog_vertical_margin"
-        android:gravity="right">
+        android:gravity="end">
 
         <Button
             android:id="@+id/btn_save"
@@ -107,6 +111,7 @@
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:padding="@dimen/dialog_padding"
+            android:contentDescription="@string/save"
             android:text="@string/save"
             android:textColor="@color/colorPrimary" />
 
@@ -116,6 +121,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
+            android:contentDescription="@string/cancel"
             android:padding="@dimen/dialog_padding"
             android:text="@string/cancel"
             android:textColor="@color/colorAccent" />

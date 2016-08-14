@@ -37,7 +37,6 @@ import butterknife.OnLongClick;
  */
 public class DetailsFragment extends Fragment {
 
-    public static final String POS = "pos";
     public static final int REQUEST_CODE_SEARCH = 100;
     public static final String DATE = "date";
 
@@ -60,6 +59,7 @@ public class DetailsFragment extends Fragment {
 
     private IntakeAdapter adapter;
     private DBHelper dbHelper;
+    private boolean isToday;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -77,7 +77,7 @@ public class DetailsFragment extends Fragment {
         adapter = new IntakeAdapter();
         mRecyclerView.setAdapter(adapter);
 
-        if (getArguments().getSerializable(DATE) != null) {
+        if (getArguments() != null && getArguments().getSerializable(DATE) != null) {
             date = (Date) getArguments().getSerializable(DATE);
             setDate(date);
         }
@@ -107,7 +107,8 @@ public class DetailsFragment extends Fragment {
 
     public void setDate(Date date) {
         this.date = date;
-        if (!Utils.dateToString(new Date()).equalsIgnoreCase(Utils.dateToString(date))) {
+        isToday = Utils.dateToString(new Date()).equalsIgnoreCase(Utils.dateToString(date));
+        if (!isToday) {
             addFab.setVisibility(View.GONE);
         } else
             addFab.setVisibility(View.VISIBLE);
@@ -122,7 +123,11 @@ public class DetailsFragment extends Fragment {
         adapter.setList(list);
 
         int kcalDaily = Utils.getDailyKcal(getActivity());
-        tvDate.setText(getString(R.string.date_today, Utils.dateToString(date)));
+        if (isToday)
+            tvDate.setText(getString(R.string.date_today, Utils.dateToString(date)));
+        else
+            tvDate.setText(Utils.dateToString(date));
+
         tvFpc.setText(getString(R.string.today_fcp, item.getFat(), item.getCarbs(), item.getProtein()));
         if (item.getKcal() > kcalDaily) {
             arcProgress.setMax(item.getKcal());

@@ -32,12 +32,11 @@
 
                     <TextView
                         android:id="@+id/tv_date"
+                        style="@style/TextStyleHeader"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        style="@style/TextStyleHeader"
                         android:layout_alignParentTop="true"
-                        android:layout_centerHorizontal="true"
-                        android:text="Today" />
+                        android:layout_centerHorizontal="true" />
 
                     <com.github.lzyzsd.circleprogress.ArcProgress
                         android:id="@+id/arc_progress"
@@ -55,8 +54,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/arc_progress"
-                        android:layout_centerHorizontal="true"
-                        android:text="Fat: 0g, Carbs: 0g, Protein: 0g" />
+                        android:layout_centerHorizontal="true" />
 
                 </RelativeLayout>
             </android.support.v7.widget.Toolbar>
@@ -65,9 +63,9 @@
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_history"
-            android:background="@color/colorBg"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/colorBg"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     </android.support.design.widget.CoordinatorLayout>

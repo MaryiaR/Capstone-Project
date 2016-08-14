@@ -8,6 +8,5 @@
     <TextView
         android:id="@+id/tv_date"
         style="@style/TextStyle"
-        android:layout_width="match_parent"
-        android:text="date" />
+        android:layout_width="match_parent" />
 </LinearLayout>

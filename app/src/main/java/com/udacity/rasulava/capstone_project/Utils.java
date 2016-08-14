@@ -214,19 +214,21 @@ public class Utils {
         return sharedPreferences.getInt(PREFS_KCAL_KEY, 0);
     }
 
-    public static void trackEvent(CaloriesApplication application, String category, String action){
-        Tracker mTracker = application.getDefaultTracker();
-        mTracker.send(new HitBuilders.EventBuilder()
-                .setCategory(category)
-                .setAction(action)
-                .build());
+    public static void trackEvent(CaloriesApplication application, String category, String action) {
+        if (application.isGoogleServicesAvailable()) {
+            Tracker mTracker = application.getDefaultTracker();
+            mTracker.send(new HitBuilders.EventBuilder()
+                    .setCategory(category)
+                    .setAction(action)
+                    .build());
+        }
     }
 
     public static boolean isGooglePlayServicesAvailable(Activity activity) {
         GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
         int status = googleApiAvailability.isGooglePlayServicesAvailable(activity);
-        if(status != ConnectionResult.SUCCESS) {
-            if(googleApiAvailability.isUserResolvableError(status)) {
+        if (status != ConnectionResult.SUCCESS) {
+            if (googleApiAvailability.isUserResolvableError(status)) {
                 googleApiAvailability.getErrorDialog(activity, status, 2404).show();
             }
             return false;

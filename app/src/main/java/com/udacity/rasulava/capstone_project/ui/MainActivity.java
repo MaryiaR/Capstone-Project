@@ -35,9 +35,9 @@ public class MainActivity extends TrackedActivity implements OnDayClickListener 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
         if (!Utils.isGooglePlayServicesAvailable(this))
-            Toast.makeText(this, "Google Play Store is missing.", Toast.LENGTH_LONG).show();
+            ((CaloriesApplication) getApplication()).setGoogleServicesAvailable(false);
+        ButterKnife.bind(this);
         if (new DBHelper(this).deleteOldData())
             Utils.trackEvent((CaloriesApplication) getApplication(), "db", "delete_old_data");
         if (containerDetails != null) {
