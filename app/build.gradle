@@ -18,10 +18,21 @@ android {
         resValue "string", "banner_ad_app_id", "YOUR KEY"
         resValue "string", "analytics_id", "YOUR KEY"
     }
+
+    signingConfigs {
+        release {
+            storeFile file('keystore.jks')
+            storePassword "udacity"
+            keyAlias 'CaloriesAppKey'
+            keyPassword "udacity"
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
 }
