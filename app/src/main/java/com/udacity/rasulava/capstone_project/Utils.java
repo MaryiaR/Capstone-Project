@@ -124,6 +124,15 @@ public class Utils {
         return calendar.getTime();
     }
 
+    public static long roundDateToDay(long ms) {
+        calendar.setTimeInMillis(ms);
+        calendar.set(Calendar.MILLISECOND, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.HOUR, 0);
+        return calendar.getTimeInMillis();
+    }
+
     private static HistoryItem createHistoryItem(Context context, Date date) {
         List<IntakeItem> dbIntakeList = new DBHelper(context).getHistoryForDate(date);
         HistoryItem item = intakesToHistoryItem(dbIntakeList);

@@ -6,7 +6,7 @@ import android.app.backup.FileBackupHelper;
 import android.app.backup.SharedPreferencesBackupHelper;
 import android.content.Context;
 
-import com.udacity.rasulava.capstone_project.db.DBHelper;
+import com.udacity.rasulava.capstone_project.db.DataDbHelper;
 
 /**
  * Created by Maryia on 13.08.2016.
@@ -15,8 +15,8 @@ public class DataBackupAgent extends BackupAgentHelper {
 
     @Override
     public void onCreate() {
-        FileBackupHelper fileBackupHelper = new FileBackupHelper(this, "../databases/" + DBHelper.DB_NAME);
-        addHelper(DBHelper.DB_NAME, fileBackupHelper);
+        FileBackupHelper fileBackupHelper = new FileBackupHelper(this, "../databases/" + DataDbHelper.DATABASE_NAME);
+        addHelper(DataDbHelper.DATABASE_NAME, fileBackupHelper);
 
         SharedPreferencesBackupHelper helper = new SharedPreferencesBackupHelper(this, Utils.PREFS_NAME);
         addHelper("prefs", helper);

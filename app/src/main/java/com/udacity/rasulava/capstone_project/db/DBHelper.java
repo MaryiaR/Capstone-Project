@@ -1,7 +1,10 @@
 package com.udacity.rasulava.capstone_project.db;
 
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
+import android.database.Cursor;
+import android.net.Uri;
 
 import com.udacity.rasulava.capstone_project.DataBackupAgent;
 import com.udacity.rasulava.capstone_project.Utils;
@@ -12,100 +15,128 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import de.greenrobot.dao.query.QueryBuilder;
-
 /**
  * Created by Maryia on 12.08.2016.
  */
 public class DBHelper {
-
-    public static final String DB_NAME = "products_db";
-
-    private IntakeDao intakeDao;
-
-    private ProductDao productDao;
-
-    private SQLiteDatabase db;
-
     private Context context;
+
+    private ContentResolver contentResolver;
 
     public DBHelper(Context context) {
         this.context = context;
-        setupDb();
-        closeDb();
-    }
-
-    public void setupDb() {
-        DaoMaster.DevOpenHelper masterHelper = new DaoMaster.DevOpenHelper(context, DB_NAME, null);
-        db = masterHelper.getWritableDatabase();
-        DaoMaster master = new DaoMaster(db);
-        DaoSession masterSession = master.newSession();
-        intakeDao = masterSession.getIntakeDao();
-        productDao = masterSession.getProductDao();
-    }
-
-    private void closeDb() {
-        db.close();
+        contentResolver = context.getContentResolver();
     }
 
     public List<Product> getProductsByName(String name) {
-        setupDb();
-        List<Product> productList = productDao.queryBuilder().where(ProductDao.Properties.Name.like("%" + name + "%")).build().list();
-        closeDb();
+        Uri uri = FoodContract.ProductEntry.buildProductWithNameUri(name);
+//        String selection = FoodContract.ProductEntry.COLUMN_PRODUCT_NAME + " LIKE ?";
+//        String[] selectionArgs = new String[]{name};
+        List<Product> productList = new ArrayList<>();
+        try {
+            Cursor cursor = contentResolver.query(uri, null, null, null, null);
+            if (cursor.moveToFirst()) {
+                do {
+                    Product product = new Product();
+                    product.setId((long) cursor.getInt(cursor.getColumnIndex(FoodContract.ProductEntry._ID)));
+                    product.setName(cursor.getString(cursor.getColumnIndex(FoodContract.ProductEntry.COLUMN_PRODUCT_NAME)));
+                    product.setFat(cursor.getInt(cursor.getColumnIndex(FoodContract.ProductEntry.COLUMN_PRODUCT_FAT)));
+                    product.setCarbohydrate(cursor.getInt(cursor.getColumnIndex(FoodContract.ProductEntry.COLUMN_PRODUCT_CARB)));
+                    product.setProtein(cursor.getInt(cursor.getColumnIndex(FoodContract.ProductEntry.COLUMN_PRODUCT_PROTEIN)));
+                    product.setCalories(cursor.getInt(cursor.getColumnIndex(FoodContract.ProductEntry.COLUMN_PRODUCT_CALORIES)));
+                    productList.add(product);
+                } while (cursor.moveToNext());
+            }
+
+            cursor.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
         return productList;
     }
 
     public List<IntakeItem> getHistoryForDate(Date date) {
-        setupDb();
-        QueryBuilder<Intake> queryBuilder = intakeDao.queryBuilder().where(IntakeDao.Properties.Date.eq(Utils.roundDateToDay(date)));
-        List<Intake> dbIntakeList = queryBuilder.build().list();
+        String selection = DataProvider.historyByDateSelection;
+        String[] selectionArgs = new String[]{String.valueOf(Utils.roundDateToDay(date.getTime()))};
+        List<Intake> resultList = new ArrayList<>();
+        try {
+            Cursor cursor = contentResolver.query(FoodContract.IntakeEntry.CONTENT_URI, null, selection, selectionArgs, null);
+            if (cursor.moveToFirst()) {
+                do {
+                    Intake intake = new Intake();
+                    intake.setId((long) cursor.getInt(cursor.getColumnIndex(FoodContract.IntakeEntry._ID)));
+                    intake.setDate(new Date(cursor.getLong(cursor.getColumnIndex(FoodContract.IntakeEntry.COLUMN_DATE))));
+                    intake.setWeight(cursor.getInt(cursor.getColumnIndex(FoodContract.IntakeEntry.COLUMN_WEIGHT)));
+                    int productId = cursor.getInt(cursor.getColumnIndex(FoodContract.IntakeEntry.COLUMN_PRODUCT_ID));
+
+                    Cursor productCursor = contentResolver.query(FoodContract.ProductEntry.buildProductUri(productId), null, null, null, null);
+                    if (productCursor.moveToFirst()) {
+                        Product product = new Product();
+                        product.setId((long) productId);
+                        product.setName(productCursor.getString(productCursor.getColumnIndex(FoodContract.ProductEntry.COLUMN_PRODUCT_NAME)));
+                        product.setFat(productCursor.getInt(productCursor.getColumnIndex(FoodContract.ProductEntry.COLUMN_PRODUCT_FAT)));
+                        product.setCarbohydrate(productCursor.getInt(productCursor.getColumnIndex(FoodContract.ProductEntry.COLUMN_PRODUCT_CARB)));
+                        product.setProtein(productCursor.getInt(productCursor.getColumnIndex(FoodContract.ProductEntry.COLUMN_PRODUCT_PROTEIN)));
+                        product.setCalories(productCursor.getInt(productCursor.getColumnIndex(FoodContract.ProductEntry.COLUMN_PRODUCT_CALORIES)));
+                        intake.setProduct(product);
+                    }
+                    productCursor.close();
+                    resultList.add(intake);
+                } while (cursor.moveToNext());
+            }
+
+            cursor.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
         List<IntakeItem> intakeList = new ArrayList<>();
-        for (Intake dbIntake : dbIntakeList) {
+        for (Intake dbIntake : resultList) {
             intakeList.add(new IntakeItem(dbIntake));
         }
-        closeDb();
         return intakeList;
     }
 
 
     public long save(Product product) {
-        setupDb();
-        long id = productDao.insert(product);
-        closeDb();
+        ContentValues cv = new ContentValues();
+        cv.put(FoodContract.ProductEntry.COLUMN_PRODUCT_NAME, product.getName());
+        cv.put(FoodContract.ProductEntry.COLUMN_PRODUCT_FAT, product.getFat());
+        cv.put(FoodContract.ProductEntry.COLUMN_PRODUCT_CARB, product.getCarbohydrate());
+        cv.put(FoodContract.ProductEntry.COLUMN_PRODUCT_PROTEIN, product.getProtein());
+        cv.put(FoodContract.ProductEntry.COLUMN_PRODUCT_CALORIES, product.getCalories());
+        Uri newUri = contentResolver.insert(FoodContract.ProductEntry.CONTENT_URI, cv);
+
         DataBackupAgent.requestBackup(context);
-        return id;
+        return FoodContract.ProductEntry.getIdFromUri(newUri);
     }
 
     public long save(Intake intake) {
-        setupDb();
-        Date date = Utils.roundDateToDay(intake.getDate());
-        intake.setDate(date);
-        long id = intakeDao.insert(intake);
-        closeDb();
+        long date = Utils.roundDateToDay(intake.getDate().getTime());
+
+        ContentValues cv = new ContentValues();
+        cv.put(FoodContract.IntakeEntry.COLUMN_DATE, date);
+        cv.put(FoodContract.IntakeEntry.COLUMN_WEIGHT, intake.getWeight());
+        cv.put(FoodContract.IntakeEntry.COLUMN_PRODUCT_ID, intake.getProduct().getId());
+        Uri newUri = contentResolver.insert(FoodContract.IntakeEntry.CONTENT_URI, cv);
+
         DataBackupAgent.requestBackup(context);
         CaloriesWidgetProvider.update(context);
-        return id;
+        return FoodContract.IntakeEntry.getIdFromUri(newUri);
     }
 
     public boolean deleteOldData() {
-        boolean isSuccess = false;
-        setupDb();
         Date weekAgoDate = Utils.getDateWeekAgo();
-        List<Intake> intakes = intakeDao.queryBuilder().where(IntakeDao.Properties.Date.le(weekAgoDate)).list();
-        if (intakes != null && !intakes.isEmpty()) {
-            intakeDao.deleteInTx(intakes);
-            DataBackupAgent.requestBackup(context);
-            isSuccess = true;
-        }
-        closeDb();
-        return isSuccess;
+        String selection = DataProvider.oldHistorySelection;
+        String[] selectionArgs = new String[]{String.valueOf(weekAgoDate.getTime())};
+        int rows = contentResolver.delete(FoodContract.IntakeEntry.CONTENT_URI, selection, selectionArgs);
+        return rows > 0;
     }
 
 
     public void delete(Long intakeId) {
-        setupDb();
-        intakeDao.deleteByKey(intakeId);
-        closeDb();
+        Uri uri = FoodContract.IntakeEntry.buildIntakeUri(intakeId);
+        contentResolver.delete(uri, null, null);
         DataBackupAgent.requestBackup(context);
         CaloriesWidgetProvider.update(context);
     }

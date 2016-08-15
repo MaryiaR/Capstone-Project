@@ -54,6 +54,10 @@
             android:name="com.google.android.gms.analytics.AnalyticsService"
             android:enabled="true"
             android:exported="false" />
+
+        <provider android:name=".db.DataProvider"
+            android:authorities="com.udacity.rasulava.capstone_project">
+        </provider>
     </application>
 
 </manifest>
